@@ -9,6 +9,10 @@ def show_dashboard(request):
         'gender': "Male",
         'tempat_lahir': "Jakarta",
         'tanggal_lahir': "14 Juni 2004",
-        'role': "User"
+        'role': "Artist",
+        'playlists': ["Bubu lucu"],
+        'songs': ["dada gugu", "meow meow"],
+        'podcasts': [],
+        'albums': []
     }
     return render(request, "dashboard.html", context)

@@ -65,50 +65,109 @@
           
             </div>
           </div>
-          
-        <!-- Playlists Card -->
-        <div class="ml-2 p-4 border rounded w-3/4 ">
-          <h2 class="text-3xl font-bold pb-3">Playlists</h2>
-          <div class="grid grid-cols-4 gap-9">
-            <!-- Individual Playlist -->
-            <div class="rounded overflow-hidden shadow-lg">
-              <img class="w-full" src="{% static 'images/defaultPlaylist.png' %}" alt="Playlist 1">
-              <div class="px-6 py-4">
-                <div class="font-semibold text-xl mb-2">Playlist 1</div>
-              </div>
-            </div>
-            <!-- More Playlists -->
-            <div class="rounded overflow-hidden shadow-lg">
-              <img class="w-full" src="{% static 'images/defaultPlaylist.png' %}" alt="Playlist 1">
-              <div class="px-6 py-4">
-                <div class="font-semibold text-xl mb-2">Playlist 2</div>
-              </div>
-            </div>
-            <div class="rounded overflow-hidden shadow-lg">
-              <img class="w-full" src="{% static 'images/defaultPlaylist.png' %}" alt="Playlist 1">
-              <div class="px-6 py-4">
-                <div class="font-semibold text-xl mb-2">Playlist 3</div>
-              </div>
-            </div>
-            <div class="rounded overflow-hidden shadow-lg">
-              <img class="w-full" src="{% static 'images/defaultPlaylist.png' %}" alt="Playlist 1">
-              <div class="px-6 py-4">
-                <div class="font-semibold text-xl mb-2">Playlist 4</div>
-              </div>
-            </div>
-            <div class="rounded overflow-hidden shadow-lg">
-              <img class="w-full" src="{% static 'images/defaultPlaylist.png' %}" alt="Playlist 1">
-              <div class="px-6 py-4">
-                <div class="font-semibold text-xl mb-2">Playlist 5</div>
-              </div>
-            </div>
-            <!-- ... -->
+        
+        <!-- Playlists/Songs/Podcasts/Albums Card -->
+        <div id="iterate"class="ml-2 p-4 border rounded w-3/4 ">
+            
           </div>
-        </div>
       </div>
     </div>
   </body>
 
   {% include 'footer.html' %}
+
+  <script>
+    var role = "{{ role }}";
+
+    if (role === "Artist" || role === "Songwriter"){
+        document.getElementById("iterate").innerHTML = `
+            <h2 class="text-3xl font-bold pb-3">Songs</h2>
+            {% if songs %}
+                <div class="grid grid-cols-4 gap-9">
+                <!-- Iterate through songs -->
+                {% for song in songs %}
+                    <div class="rounded overflow-hidden shadow-lg">
+                    <img class="w-full" src="{% static 'images/defaultPlaylist.png' %}">
+                    <div class="px-6 py-4">
+                        <div class="font-semibold text-xl mb-2">{{ song }}</div>
+                    </div>
+                    </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <!-- Show message if songs is empty -->
+                <div class="text-center text-4xl justify-center">
+                <div><p class="font-semibold">Belum Memiliki Lagu.</p></div>
+                <div class="mx-auto w-1/3"><img class="" src="{% static 'images/no_data.png' %}" alt="No Data"></div>
+                </div>
+            {% endif %}`;
+    } else if (role === "Podcaster"){
+        document.getElementById("iterate").innerHTML = `
+            <h2 class="text-3xl font-bold pb-3">Podcasts</h2>
+            {% if podcasts %}
+                <div class="grid grid-cols-4 gap-9">
+                <!-- Iterate through podcasts -->
+                {% for podcast in podcasts %}
+                    <div class="rounded overflow-hidden shadow-lg">
+                    <img class="w-full" src="{% static 'images/defaultPlaylist.png' %}">
+                    <div class="px-6 py-4">
+                        <div class="font-semibold text-xl mb-2">{{ podcast }}</div>
+                    </div>
+                    </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <!-- Show message if podcasts is empty -->
+                <div class="text-center text-4xl justify-center">
+                <div><p class="font-semibold">Belum Memiliki Podcast.</p></div>
+                <div class="mx-auto w-1/3"><img class="" src="{% static 'images/no_data.png' %}" alt="No Data"></div>
+                </div>
+            {% endif %}`;
+    } else if (role === "Label"){
+        document.getElementById("iterate").innerHTML = `
+            <h2 class="text-3xl font-bold pb-3">Albums</h2>
+            {% if albums %}
+                <div class="grid grid-cols-4 gap-9">
+                <!-- Iterate through playlists -->
+                {% for album in albums %}
+                    <div class="rounded overflow-hidden shadow-lg">
+                    <img class="w-full" src="{% static 'images/defaultPlaylist.png' %}">
+                    <div class="px-6 py-4">
+                        <div class="font-semibold text-xl mb-2">{{ album }}</div>
+                    </div>
+                    </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <!-- Show message if albums is empty -->
+                <div class="text-center text-4xl justify-center">
+                <div><p class="font-semibold">Belum Memproduksi Album.</p></div>
+                <div class="mx-auto w-1/3"><img class="" src="{% static 'images/no_data.png' %}" alt="No Data"></div>
+                </div>
+            {% endif %}`;
+    } else {
+        document.getElementById("iterate").innerHTML = `
+            <h2 class="text-3xl font-bold pb-3">Playlists</h2>
+            {% if playlists %}
+                <div class="grid grid-cols-4 gap-9">
+                <!-- Iterate through playlists -->
+                {% for playlist in playlists %}
+                    <div class="rounded overflow-hidden shadow-lg">
+                    <img class="w-full" src="{% static 'images/defaultPlaylist.png' %}">
+                    <div class="px-6 py-4">
+                        <div class="font-semibold text-xl mb-2">{{ playlist }}</div>
+                    </div>
+                    </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <!-- Show message if playlists is empty -->
+                <div class="text-center text-4xl justify-center">
+                <div><p class="font-semibold">Belum Memiliki Playlist.</p></div>
+                <div class="mx-auto w-1/3"><img class="" src="{% static 'images/no_data.png' %}" alt="No Data"></div>
+                </div>
+            {% endif %}`;
+    }
+</script>
 
 {% endblock content %}
