@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music App</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+   .bg-custom-orange {
+      background-color: #FFA500;
+    }
+
+   .text-custom-orange {
+      color: #FFA500;
+    }
+
+   .text-custom-gray {
+      color: #8E8E8E;
+    }
+
+   .border-custom-orange {
+      border-color: #FFA500;
+    }
+
+   .hover\:bg-custom-orange:hover {
+      background-color: #FFA500;
+    }
+
+   .hover\:text-white:hover {
+      color: #FFFFFF;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 h-screen">
+  <div class="container mx-auto px-4 py-8 mt-20">
+    <h1 class="text-4xl font-bold text-center mb-8">USER PLAYLIST DETAIL</h1>
+    <div class="bg-custom-orange rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-bold mb-4">Judul: {{ judul_playlist }}</h2>
+      <div class="text-custom-white mb-2">Pembuat: {{ pembuat }}</div>
+      <div class="text-custom-white mb-2">Jumlah Lagu: {{ jumlah_lagu }}</div>
+      <div class="text-custom-white mb-2">Total Durasi: {{ total_durasi }}</div>
+      <div class="text-custom-white mb-2">Tanggal Dibuat: {{ tanggal_dibuat }}</div>
+      <div class="mb-4">Deskripsi: {{ deskripsi }}</div>
+      <div class="flex justify-end">
+        <button class="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded mr-2">[Shuffle Play]</button>
+        <button class="bg-white hover:bg-gray-100 text-custom-orange font-bold py-2 px-4 rounded border border-custom-orange">[Kembali]</button>
+      </div>
+    </div>
+    <div class="bg-white rounded shadow-md p-4">
+      <h2 class="text-xl font-bold mb-2">DAFTAR LAGU</h2>
+      <table class="w-full table-auto">
+        <thead>
+          <tr>
+            <th class="px-4 py-2 text-left">Judul Lagu</th>
+            <th class="px-4 py-2 text-left">Oleh</th>
+            <th class="px-4 py-2 text-left">Durasi</th>
+            <th class="px-4 py-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for lagu in daftar_lagu %}
+          <tr>
+            <td class="border-b border-gray-200 px-4 py-2">{{ lagu.judul }}</td>
+            <td class="border-b border-gray-200 px-4 py-2">{{ lagu.artis }}</td>
+            <td class="border-b border-gray-200 px-4 py-2">{{ lagu.durasi }}</td>
+            <td class="border-b border-gray-200 px-4 py-2">
+              <button class="bg-custom-orange hover:bg-orange-700 text-white font-bold py-2 px-4 rounded mr-2">Play</button>
+              <button class="bg-white hover:bg-gray-100 text-custom-orange font-bold py-2 px-4 rounded border border-custom-orange">Remove</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
+
+
+{% endblock content %}
