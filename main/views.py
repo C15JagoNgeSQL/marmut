@@ -24,3 +24,12 @@ def show_dashboard(request):
         'albums': ["Dune: Part Two", "Barbie", "The Batman"]
     }
     return render(request, "dashboard.html", context)
+
+def show_register(request):
+    return render(request, "register.html")
+
+def show_register_user(request):
+    return render(request, "registerUser.html")
+
+def show_register_label(request):
+    return render(request, "registerLabel.html")
