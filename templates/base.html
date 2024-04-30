@@ -1,24 +1,51 @@
 {% load static %}
 
-{% block framework %}
-  <script src="https://cdn.tailwindcss.com"></script>
-{% endblock %}
-
-
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-        />
-        {% block meta %}
-        {% endblock meta %}
-    </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <body>
-        {% block content %}
-        {% endblock content %}
-    </body>
+  <link rel="shortcut icon" type="image/png" href="{% static 'images/MarmutLogo.png' %}" >
+  <!-- Link CSS Framework -->
+  {% block framework %}
+  {% endblock %}
+  <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script> -->
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+  </style>
+
+  <!-- CSS Static -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css"/>
+
+  <!-- Meta Tambahan -->
+  {% block meta %}
+  <title>Marmut</title>
+  {% endblock %}
+
+  <!-- Favicon -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+</head>
+<body class="flex flex-col min-h-screen">
+
+  <!-- Content -->
+  {% block content %}
+    <h1>Hi Welcome to Marmut</h1>
+  {% endblock %}
+
+  <!-- JS Framework -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+  <!-- JS Static -->
+  <!-- <script src="{% static 'js/index.js' %}"></script> -->
+</body>
 </html>
