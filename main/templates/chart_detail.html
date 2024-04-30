@@ -31,40 +31,37 @@
     }
   </style>
 </head>
-<body>
-  <div class="container mx-auto px-4 py-8">
+<body class="bg-gray-100 h-screen">
+  <div class="container mx-auto px-4 py-8 mt-20">
     <h1 class="text-4xl font-bold text-center mb-8">CHART DETAIL</h1>
-    <div class="bg-white border border-gray-200 rounded shadow p-4">
-      <h2 class="text-xl font-bold mb-2">Tipe: Daily Top 20</h2>
-      <button class="bg-custom-orange text-white px-4 py-2 rounded text-custom-gray border-custom-orange hover:bg-custom-orange hover:text-white">[Kembali]</button>
+    <div class="bg-custom-orange rounded shadow-md p-4 mb-4">
+      <h2 class="text-xl font-bold mb-2 text-white">Tipe: {{ chart_type }}</h2>
+      <button class="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded justify-end">[Kembali]</button>
     </div>
-    <div class="bg-white border border-gray-200 rounded shadow p-4 mt-4">
+    <div class="bg-white rounded shadow-md p-4">
       <h2 class="text-xl font-bold mb-2">DAFTAR LAGU</h2>
       <table class="w-full table-auto">
         <thead>
           <tr>
-            <th class="px-4 py-2 text-left">Judul Lagu</th>
-            <th class="px-4 py-2 text-left">Oleh</th>
-            <th class="px-4 py-2 text-left">Tanggal Rilis</th>
-            <th class="px-4 py-2 text-left">Total Plays</th>
-            <th class="px-4 py-2 text-left">Actions</th>
+            <th class="px-6 py-3 text-left">Judul Lagu</th>
+            <th class="px-6 py-3 text-left">Oleh</th>
+            <th class="px-6 py-3 text-left">Tanggal Rilis</th>
+            <th class="px-6 py-3 text-left">Total Plays</th>
+            <th class="px-6 py-3 text-left">Actions</th>
           </tr>
         </thead>
         <tbody>
+          {% for song in songs %}
           <tr>
-            <td class="border-b border-gray-200 px-4 py-2">Song1</td>
-            <td class="border-b border-gray-200 px-4 py-2">Artist1</td>
-            <td class="border-b border-gray-200 px-4 py-2">09/03/2024</td>
-            <td class="border-b border-gray-200 px-4 py-2">21000</td>
-            <td class="border-b border-gray-200 px-4 py-2"><button class="bg-custom-orange text-white px-4 py-2 rounded text-custom-gray border-custom-orange hover:bg-custom-orange hover:text-white">[Lihat]</button></td>
+            <td class="border-b border-gray-200 px-6 py-4">{{ song.title }}</td>
+            <td class="border-b border-gray-200 px-6 py-4">{{ song.artist }}</td>
+            <td class="border-b border-gray-200 px-6 py-4">{{ song.release_date }}</td>
+            <td class="border-b border-gray-200 px-6 py-4">{{ song.total_plays }}</td>
+            <td class="border-b border-gray-200 px-6 py-4">
+              <button class="bg-custom-orange hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">[Lihat]</button>
+            </td>
           </tr>
-          <tr>
-            <td class="border-b border-gray-200 px-4 py-2">Song2</td>
-            <td class="border-b border-gray-200 px-4 py-2">Artist2</td>
-            <td class="border-b border-gray-200 px-4 py-2">02/03/2024</td>
-            <td class="border-b border-gray-200 px-4 py-2">19000</td>
-            <td class="border-b border-gray-200 px-4 py-2"><button class="bg-custom-orange text-white px-4 py-2 rounded text-custom-gray border-custom-orange hover:bg-custom-orange hover:text-white">[Lihat]</button></td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>

@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,47 +9,47 @@
   <title>Music App</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    .bg-custom-orange {
+   .bg-custom-orange {
       background-color: #FFA500;
     }
 
-    .text-custom-orange {
+   .text-custom-orange {
       color: #FFA500;
     }
 
-    .text-custom-gray {
+   .text-custom-gray {
       color: #8E8E8E;
     }
 
-    .border-custom-orange {
+   .border-custom-orange {
       border-color: #FFA500;
     }
 
-    .hover\:bg-custom-orange:hover {
+   .hover\:bg-custom-orange:hover {
       background-color: #FFA500;
     }
 
-    .hover\:text-white:hover {
+   .hover\:text-white:hover {
       color: #FFFFFF;
     }
   </style>
 </head>
-<body>
-  <div class="container mx-auto px-4 py-8">
+<body class="bg-gray-100 h-screen">
+  <div class="container mx-auto px-4 py-8 mt-20">
     <h1 class="text-4xl font-bold text-center mb-8">USER PLAYLIST DETAIL</h1>
-    <div class="bg-white border border-gray-200 rounded shadow p-4">
-      <h2 class="text-xl font-bold mb-2">Judul: Playlist1</h2>
-      <p class="text-custom-gray mb-2">Pembuat: Pembuat1</p>
-      <p class="text-custom-gray mb-2">Jumlah Lagu: 12</p>
-      <p class="text-custom-gray mb-2">Total Durasi: 8 jam 20 menit</p>
-      <p class="text-custom-gray mb-2">Tanggal Dibuat: 18/03/24</p>
-      <p class="mb-2">Deskripsi: Lorem Ipsum ….</p>
+    <div class="bg-custom-orange rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-bold mb-4">Judul: {{ judul_playlist }}</h2>
+      <div class="text-custom-white mb-2">Pembuat: {{ pembuat }}</div>
+      <div class="text-custom-white mb-2">Jumlah Lagu: {{ jumlah_lagu }}</div>
+      <div class="text-custom-white mb-2">Total Durasi: {{ total_durasi }}</div>
+      <div class="text-custom-white mb-2">Tanggal Dibuat: {{ tanggal_dibuat }}</div>
+      <div class="mb-4">Deskripsi: {{ deskripsi }}</div>
       <div class="flex justify-end">
-        <button class="bg-custom-orange text-white px-4 py-2 rounded text-custom-gray border-custom-orange hover:bg-custom-orange hover:text-white mr-2">[Shuffle Play]</button>
-        <button class="bg-white text-custom-orange px-4 py-2 rounded border-custom-orange hover:bg-custom-orange hover:text-white">[Kembali]</button>
+        <button class="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded mr-2">[Shuffle Play]</button>
+        <button class="bg-white hover:bg-gray-100 text-custom-orange font-bold py-2 px-4 rounded border border-custom-orange">[Kembali]</button>
       </div>
     </div>
-    <div class="bg-white border border-gray-200 rounded shadow p-4 mt-4">
+    <div class="bg-white rounded shadow-md p-4">
       <h2 class="text-xl font-bold mb-2">DAFTAR LAGU</h2>
       <table class="w-full table-auto">
         <thead>
@@ -58,36 +61,23 @@
           </tr>
         </thead>
         <tbody>
+          {% for lagu in daftar_lagu %}
           <tr>
-            <td class="border-b border-gray-200 px-4 py-2">Song1</td>
-            <td class="border-b border-gray-200 px-4 py-2">Artist1</td>
-            <td class="border-b border-gray-200 px-4 py-2">2 menit</td>
+            <td class="border-b border-gray-200 px-4 py-2">{{ lagu.judul }}</td>
+            <td class="border-b border-gray-200 px-4 py-2">{{ lagu.artis }}</td>
+            <td class="border-b border-gray-200 px-4 py-2">{{ lagu.durasi }}</td>
             <td class="border-b border-gray-200 px-4 py-2">
-              <button class="bg-custom-orange text-white px-4 py-2 rounded text-custom-gray border-custom-orange hover:bg-custom-orange hover:text-white mr-2">Play</button>
-              <button class="bg-white text-custom-orange px-4 py-2 rounded border-custom-orange hover:bg-custom-orange hover:text-white">Remove</button>
+              <button class="bg-custom-orange hover:bg-orange-700 text-white font-bold py-2 px-4 rounded mr-2">Play</button>
+              <button class="bg-white hover:bg-gray-100 text-custom-orange font-bold py-2 px-4 rounded border border-custom-orange">Remove</button>
             </td>
           </tr>
-          <tr>
-            <td class="border-b border-gray-200 px-4 py-2">Song2</td>
-            <td class="border-b border-gray-200 px-4 py-2">Artist2</td>
-            <td class="border-b border-gray-200 px-4 py-2">3 menit</td>
-            <td class="border-b border-gray-200 px-4 py-2">
-              <button class="bg-custom-orange text-white px-4 py-2 rounded text-custom-gray border-custom-orange hover:bg-custom-orange hover:text-white mr-2">Play</button>
-              <button class="bg-white text-custom-orange px-4 py-2 rounded border-custom-orange hover:bg-custom-orange hover:text-white">Remove</button>
-            </td>
-          </tr>
-          <tr>
-            <td class="border-b border-gray-200 px-4 py-2">Song3</td>
-            <td class="border-b border-gray-200 px-4 py-2">Artist3</td>
-            <td class="border-b border-gray-200 px-4 py-2">4 menit</td>
-            <td class="border-b border-gray-200 px-4 py-2">
-              <button class="bg-custom-orange text-white px-4 py-2 rounded text-custom-gray border-custom-orange hover:bg-custom-orange hover:text-white mr-2">Play</button>
-              <button class="bg-white text-custom-orange px-4 py-2 rounded border-custom-orange hover:bg-custom-orange hover:text-white">Remove</button>
-            </td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
 </body>
 </html>
+
+
+{% endblock content %}

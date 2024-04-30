@@ -1,24 +1,53 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block framework %}
+  <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Player</title>
+    <title>Chart List</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+       .chart-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+       .chart-title {
+            background-color:#FFA500; /* Warna Orange-500 */
+            color: #fff;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+       .chart-button {
+            background-color: #FFA500; /* Warna Orange-500 */
+            color: #fff;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
-        <h1 class="text-2xl font-bold mb-4 text-center">Chart List</h1>
-        <div class="grid grid-cols-1 gap-4">
-            <div class="bg-orange-500 text-black rounded-lg p-4 flex items-center justify-between">
-                <h2 class="font-bold text-lg">Actions Daily Top 20</h2>
-                <a href="#" class="text-black hover:text-gray-100">Lihat Daftar Lagu</a>
+<body class="bg-gray-100 h-screen">
+    <div class="container mx-auto p-4 md:p-12 mt-20">
+        <h1 class="text-3xl font-bold mb-4 text-center">CHART LIST</h1>
+        <div class="flex flex-wrap justify-center mb-6">
+            {% for chart in chart_data %}
+            <div class="w-full md:w-1/2 xl:w-1/3 p-4">
+                <div class="chart-container">
+                    <div class="chart-title p-4">{{ chart.title }}</div>
+                    <div class="p-4">
+                        <a href="{{ chart.title }}" class="chart-button py-2 px-4 rounded-full text-sm font-semibold">Lihat Daftar Lagu</a>
+                    </div>
+                </div>
             </div>
-            <div class="bg-orange-500 text-black rounded-lg p-4 flex items-center justify-between">
-                <h2 class="font-bold text-lg">Weekly Top 20</h2>
-                <a href="#" class="text-black hover:text-gray-100">Lihat Daftar Lagu</a>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </body>
 </html>
+
+{% endblock content %}
