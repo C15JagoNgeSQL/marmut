@@ -9,14 +9,14 @@ def show_dashboard(request):
         'gender': "Male",
         'tempat_lahir': "Jakarta",
         'tanggal_lahir': "14 Juni 2004",
-        'isPengguna': True,
+        'isPengguna': False,
         'playlists': [],
 
         'isArtist': False,
         'isSongwriter': False,
         'songs': ["Hurt", "Ring of Fire"],
         
-        'isPodcaster': False,
+        'isPodcaster': True,
         'podcasts': ["Johnny Cash's Heaven on Earth", "A Day In The Grand Canyon", "Cash's Life Journey"],
         
         'isLabel': False,
