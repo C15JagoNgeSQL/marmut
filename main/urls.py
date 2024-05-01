@@ -16,7 +16,6 @@ urlpatterns = [
     path('lihat_chart/', temporary_lihat_chart_view, name='lihat_chart'),
     path('crud_user_playlist/', temporary_crud_user_playlist_view, name='crud_user_playlist'),
     path('r_podcast/', temporary_r_podcast_view, name='r_podcast'),
-    path('profile/', show_dashboard, name='dashboard'),
     path('register/', show_register, name="register"),
     path('register/user', show_register_user, name="registerUser"),
     path('register/label', show_register_label, name="registerLabel")
