@@ -145,3 +145,12 @@ def temporary_r_podcast_view(request):
         ]
     }
     return render(request, 'r_podcast.html', {'podcast_data': podcast_data})
+
+def show_register(request):
+    return render(request, "register.html")
+
+def show_register_user(request):
+    return render(request, "registerUser.html")
+
+def show_register_label(request):
+    return render(request, "registerLabel.html")
