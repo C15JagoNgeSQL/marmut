@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music App</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .bg-custom-orange {
+      background-color: #FFA500;
+    }
+
+    .text-custom-orange {
+      color: #FFA500;
+    }
+
+    .text-custom-gray {
+      color: #8E8E8E;
+    }
+
+    .border-custom-orange {
+      border-color: #FFA500;
+    }
+
+    .hover\:bg-custom-orange:hover {
+      background-color: #FFA500;
+    }
+
+    .hover\:text-white:hover {
+      color: #FFFFFF;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 h-screen">
+  <div class="container mx-auto px-4 py-8 mt-20">
+    <h1 class="text-4xl font-bold text-center mb-8">CHART DETAIL</h1>
+    <div class="bg-custom-orange rounded shadow-md p-4 mb-4">
+      <h2 class="text-xl font-bold mb-2 text-white">Tipe: {{ chart_type }}</h2>
+      <button class="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded justify-end">[Kembali]</button>
+    </div>
+    <div class="bg-white rounded shadow-md p-4">
+      <h2 class="text-xl font-bold mb-2">DAFTAR LAGU</h2>
+      <table class="w-full table-auto">
+        <thead>
+          <tr>
+            <th class="px-6 py-3 text-left">Judul Lagu</th>
+            <th class="px-6 py-3 text-left">Oleh</th>
+            <th class="px-6 py-3 text-left">Tanggal Rilis</th>
+            <th class="px-6 py-3 text-left">Total Plays</th>
+            <th class="px-6 py-3 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for song in songs %}
+          <tr>
+            <td class="border-b border-gray-200 px-6 py-4">{{ song.title }}</td>
+            <td class="border-b border-gray-200 px-6 py-4">{{ song.artist }}</td>
+            <td class="border-b border-gray-200 px-6 py-4">{{ song.release_date }}</td>
+            <td class="border-b border-gray-200 px-6 py-4">{{ song.total_plays }}</td>
+            <td class="border-b border-gray-200 px-6 py-4">
+              <button class="bg-custom-orange hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">[Lihat]</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
