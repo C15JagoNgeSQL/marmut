@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block framework %}
+  <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block meta %}
+<title>Register</title>
+{% endblock meta %}
+
+{% block content %}
+
+<style>
+    #image-1 {
+    background-image: url("{% static 'images/penggunaRegis.jpg' %}");
+}
+</style>
+
+<body>
+    <div class="container px-20 py-24 mx-auto">
+        <div class="flex flex-col lg:flex-row w-10/12 lg:w-8/12 bg-white rounded-xl border-2 border-gray-200 border-opacity-60 mx-auto overflow-hidden">
+            <div class="w-full lg:w-1/2 flex flex-col items-center justify-center p-17 bg-no-repeat bg-cover bg-center" id="image-1"></div>
+            <div class="w-full lg:w-1/2 py-16 px-12">
+                <h2 class="text-4xl font-semibold mb-3">Form Registrasi</h2>
+                <form action="#">
+                    <div class="mt-5">
+                        <input type="text" placeholder="Email" class="border border-gray-400 py-1 px-2 w-full">
+                    </div>
+                    <div class="mt-5">
+                        <input type="password" placeholder="Password" class="border border-gray-400 py-1 px-2 w-full">
+                    </div>
+                    <div class="mt-5">
+                        <input type="text" placeholder="Nama" class="border border-gray-400 py-1 px-2 w-full">
+                    </div>
+                    <div class="mt-5">
+                        <select class="border border-gray-400 py-1 px-2 w-full">
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="mt-5">
+                        <input type="text" placeholder="Tempat Lahir" class="border border-gray-400 py-1 px-2 w-full">
+                    </div>
+                    <div class="mt-5">
+                        <label for="birthdate">Tanggal Lahir:</label>
+                        <input type="date" id="birthdate" name="birthdate">
+                    </div>
+                    <div class="mt-5">
+                        <input type="text" placeholder="Kota Asal" class="border border-gray-400 py-1 px-2 w-full">
+                    </div>
+                    <div class="mt-5">
+                        <h4 class="text-2xl font-semibold mb-3">Role:</h4>
+                    </div>
+                    <div class="mt-5">
+                        <input type="checkbox" id="option1" name="Podcaster" value="Podcaster">
+                        <label for="option1">Podcaster</label>
+                    </div>
+                    <div class="mt-5">
+                        <input type="checkbox" id="option2" name="Artist" value="Artist">
+                        <label for="option2">Artist</label>
+                    </div>
+                    <div class="mt-5">
+                        <input type="checkbox" id="option3" name="Songwriter" value="Songwriter">
+                        <label for="option3">Songwriter</label>
+                    </div>
+                    <div class="mt-5">
+                        <button class="w-full bg-orange-500 py-3 text-center text-white">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% include 'footer.html' %}
+
+<script>
+
+</script>
+
+{% endblock content %}
