@@ -6,4 +6,5 @@ app_name = 'MusicIndustry'
 
 
 urlpatterns = [
+    path('royalti/', show_royalti, name='royalti'),
 ]
