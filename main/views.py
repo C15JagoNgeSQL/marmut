@@ -72,7 +72,7 @@ def show_dashboard(request):
         'playlists': [],
 
         'isArtist': False,
-        'isSongwriter': False,
+        'isSongwriter': True,
         'songs': ["Hurt", "Ring of Fire"],
         
         'isPodcaster': True,
