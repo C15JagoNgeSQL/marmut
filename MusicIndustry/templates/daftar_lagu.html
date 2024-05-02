@@ -15,14 +15,14 @@
     <div class="bg-gray-100 px-5 pb-10 space-y-5">
         <div class="bg-white rounded-md shadow py-6 px-4 mt-20">
             <caption class="p-5 text-left rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-                <p class="text-3xl font-bold">Cek Royalti</p>
-                <p class="mt-1 text-lg font-semibold text-gray-500 dark:text-gray-400">Periksa jumlah royalti dan jumlah download dari karya lagu mu!</p>
+                <p class="text-3xl font-bold">Daftar Lagu</p>
+                <p class="mt-1 text-lg font-semibold text-gray-500 dark:text-gray-400">Akses dan kelola data lagu pada album mu!</p>
             </caption>
         </div>
         <div class="flex space-x-5">
             <!-- Simplified About Card with appropriate spacing and structure like the detailed version -->
             <div class="mr-2 p-4 bg-white rounded-md shadow w-1/4">
-                <h2 class="text-3xl font-bold pb-3">About</h2>
+                <h2 class="text-3xl font-bold pb-3">About Album</h2>
                 <div class="grid gap-3">
                     <div class="flex items-center">
                         <!-- Name Icon -->
@@ -32,69 +32,77 @@
                         <span>{{ nama }}</span>
                     </div>
                     <div class="flex items-center">
-                        <!-- Email Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-                          </svg>                          
-                        <span>{{ email }}</span>
-                    </div>
-                    <div class="flex items-center">
                         <!-- Plays Icon -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
                           </svg>                          
-                        <span>Total Plays: {{ total_keseluruhan_play }}</span>
+                        <span>Total Lagu: {{ total_lagu }}</span>
                     </div>
                     <div class="flex items-center">
                         <!-- Downloads Icon -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25" />
                           </svg>                          
-                        <span>Total Downloads: {{ total_keseluruhan_download }}</span>
+                        <span>Total Durasi: {{ total_durasi }}</span>
                     </div>
                 </div>
             </div>
             <div class="bg-white rounded-md shadow p-4 w-3/4">
                 <div class="mb-4">
                     <label for="search" class="sr-only">Search</label>
-                    <input type="text" id="search" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Search for Judul Lagu, Album, etc.">
+                    <input type="text" id="search" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Search for Judul Lagu..">
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-center text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                             <tr>
                                 <th scope="col" class="p-4">
-                                        Judul Lagu
+                                    Judul
                                 </th>
-                                <th scope="col" class="py-3 px-6">Judul Album</th>
+                                <th scope="col" class="py-3 px-6">Durasi</th>
                                 <th scope="col" class="py-3 px-6">Total Play</th>
                                 <th scope="col" class="py-3 px-6">Total Download</th>
-                                <th scope="col" class="py-3 px-6">Total Royalti Didapat</th>
+                                <th scope="col" class="py-3 px-6">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for lagu in isi_tabel %}
-                            <!-- Dynamic rows will be inserted here based on your backend data -->
                             <tr class="bg-white border-b">
                                 <td class="p-4">
-                                    <div class="flex items-center">
-                                        <div class="mr-2">
-                                        {{ lagu.judul_lagu }}
-                                    </div>
+                                    {{ lagu.judul }}
                                 </td>
-                                <td class="py-4 px-6">{{ lagu.judul_album }}</td>
+                                {% if isLabel %}
+                                {% else %}
+                                <td class="py-4 px-6">{{ lagu.durasi }}</td>
+                                {% endif %}
                                 <td class="py-4 px-6">{{ lagu.total_play }}</td>
                                 <td class="py-4 px-6">{{ lagu.total_download }}</td>
-                                <td class="py-4 px-6">{{ lagu.total_royalti_didapat }}</td>
+                                <td>
+                                    <div class="flex flex-col items-center">
+                                        <div>
+                                            <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-500 to-orange-500 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
+                                                <span class="relative px-5 py-2.5 text-orange-600 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 group-hover:text-white">
+                                                    Tambah Lagu
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-red-500 to-red-700 group-hover:from-pink-500 group-hover:to-red-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
+                                                <span class="relative px-5 py-2.5 font-bold text-red-500 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0 group-hover:text-white">
+                                                    Hapus
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
-                            <!-- Repeat for other entries -->
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div>            
         </div>
-    </div>
+    </div>  
 </body>
 {% include 'footer.html' %}
 {% endblock content %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block framework %}
+<script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block meta %}
+<title>Marmut</title>
+{% endblock meta %}
+
+{% block content %}
+<body>
+    <div class="flex justify-center items-center h-screen bg-gray-100">
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+            <h2 class="text-xl font-bold mb-4">Create New Album</h2>
+            <form>
+                <div class="mb-4">
+                    <label for="judul" class="block text-sm font-medium text-gray-700">Judul:</label>
+                    <input type="text" id="judul" name="judul" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Nama Album">
+                </div>
+                <div class="mb-6">
+                    <label for="label" class="block text-sm font-medium text-gray-700">Label:</label>
+                    <select id="label" name="label" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 border-orange-500 focus:outline-none focus:border-orange-600 focus:ring-orange-500 sm:text-sm rounded-lg">
+                        <option>Label1</option>
+                        <option>Label2</option>
+                        <option>Label3</option>
+                        <option>Label4</option>
+                        <!-- Options go here -->
+                    </select>
+                </div>
+                <div class="flex justify-end">
+                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        SUBMIT
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+{% include 'footer.html' %}
+{% endblock content %}
