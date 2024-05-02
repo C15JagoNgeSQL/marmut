@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block framework %}
+  <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block meta %}
+<title>Kelola Playlist</title>
+{% endblock meta %}
+
+{% block content %}
+
+<body>
+    <div class="container px-20 py-24 mx-auto">
+        <div class="text-left mb-12">
+            <h1 class="text-4xl md:text-6xl text-700 font-semibold">User Playlist</h1>
+        </div>
+        <div class="overflow-auto rounded-lg hidden md:block">
+            {% if playlists %}
+            <table class="w-full">
+                <thead class="bg-orange-500 border-b-2 border-gray-200">
+                <tr class="text-white">
+                    <th class="w-20 p-3 text-sm font-semibold tracking-wide text-center">Judul</th>
+                    <th class="w-20 p-3 text-sm font-semibold tracking-wide text-center">Jumlah Lagu</th>
+                    <th class="w-24 p-3 text-sm font-semibold tracking-wide text-center">Total Durasi</th>
+                    <th class="w-24 p-3 text-sm font-semibold tracking-wide text-center">Action</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                {% for playlist in playlists %}
+                <tr class="bg-gray-50">
+                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">{{ playlist.judul }}</td>
+                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">{{ playlist.jumlah_lagu }}</td>
+                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">{{ playlist.total_durasi }}</td>
+                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-center">
+                        <a href=""><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Detail</span></a>
+                        <a href=""><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">Ubah</span></a>
+                        <a href=""><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50">Hapus</span></a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <h2 class="text-3xl font-semibold mb-3 text-center">Anda Belum Memiliki Playlist</h2>
+            {% endif %}
+            
+        </div>
+        <div class="mt-8 text-center ">
+            <a href=""><button class="w-20% bg-orange-500 py-3 text-center text-white p-3 rounded-lg" style="bottom: 20px;">Tambah Playlist</button></a>
+        </div>
+    </div>
+</body>
+
+{% include 'footer.html' %}
+
+<script>
+
+</script>
+
+{% endblock content %}
