@@ -21,4 +21,5 @@ urlpatterns = [
     path('', include('main.urls')),
     path('music-industry/', include('MusicIndustry.urls')),
     path('admin/', admin.site.urls),
+    path('chart-and-podcast/', include('ChartAndPodcast.urls')),
 ]
