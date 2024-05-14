@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block framework %}
+  <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block meta %}
+<title>Play Playlist</title>
+{% endblock meta %}
+
+{% block content %}
+
+<body>
+    <div class="container px-20 py-24 mx-auto">
+        <div class="text-left mb-5">
+            <h1 class="text-4xl md:text-4xl text-700 font-semibold">User Playlist Detail</h1>
+        </div>
+        <div class="flex">
+            <div class="w-full lg:w-1/3 border-2 border-gray-200 border-opacity-60 rounded-lg flex flex-col items-center justify-center bg-no-repeat bg-cover bg-center">
+                <div class="p-4">
+                    <img src="https://hypeddit-gates-prod.s3.amazonaws.com/vc9gco_coverartmanual" alt="Gambar playlist" class="w-full h-auto">
+                </div>
+                <div class="p-4 pt-0 w-full">
+                    <a href=""><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Shuffle Play</button></a>
+                    <a href=""><button class="w-full bg-orange-500 text-center text-white p-3 rounded-lg">Kembali</button></a>  
+                </div>  
+            </div>
+            <div class="w-full lg:w-2/3 border-2 border-gray-200 border-opacity-60 rounded-lg flex flex-col bg-no-repeat bg-cover bg-center ml-3 pl-3">
+                <h3 class="text-xl font-semibold pb-3 pt-3">Judul:</h3>
+                <h3 class="text-xl pb-3">{{ detail.judul }}</h3>
+                <h3 class="text-xl font-semibold pb-3">Pembuat:</h3>
+                <h3 class="text-xl pb-3">{{ detail.pembuat }}</h3>
+                <h3 class="text-xl font-semibold pb-3">Jumlah Lagu:</h3>
+                <h3 class="text-xl pb-3">{{ detail.jumlah_lagu }}</h3>
+                <h3 class="text-xl font-semibold pb-3">Total Durasi:</h3>
+                <h3 class="text-xl pb-3">{{ detail.total_durasi }}</h3>
+                <h3 class="text-xl font-semibold pb-3">Tanggal Dibuat:</h3>
+                <h3 class="text-xl pb-3">{{ detail.tanggal_dibuat }}</h3>
+                <h3 class="text-xl font-semibold pb-3">Deskripsi:</h3>
+                <h3 class="text-xl pb-3">{{ detail.deskripsi }}</h3>
+            </div>
+        </div>
+        
+        
+        <div class="overflow-auto rounded-lg hidden md:block mt-5">
+            <table class="w-full">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">JUDUL</th>
+                    <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">OLEH</th>
+                    <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">DURASI</th>
+                    <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">ACTION</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                {% for song in detail.songs %}
+                <tr class="bg-gray-50">
+                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-left">{{ song.judul }}</td>
+                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-left">{{ song.nama_artist }}</td>
+                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-left">{{ song.durasi }} menit</td>
+                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-left">
+                        <a href=""><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Lihat</span></a>
+                        <a href=""><span class="p-1.5 ml-1 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">Play</span></a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>   
+        </div>
+        <div class="mt-5 text-center ">
+            <a href=""><button class="w-full bg-orange-500 text-center text-white p-3 rounded-lg" style="bottom: 20px;">Tambah Lagu</button></a>
+        </div>
+    </div>
+</body>
+
+{% include 'footer.html' %}
+
+<script>
+
+</script>
+
+{% endblock content %}

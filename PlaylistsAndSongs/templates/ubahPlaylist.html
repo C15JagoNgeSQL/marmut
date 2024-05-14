@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block framework %}
+  <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block meta %}
+<title>Ubah Playlist</title>
+{% endblock meta %}
+
+{% block content %}
+
+<body>
+    <div class="container px-20 py-24 mx-auto">
+        <div class="flex flex-col lg:flex-row w-10/12 lg:w-8/12 bg-white rounded-xl border-2 border-gray-200 border-opacity-60 mx-auto overflow-hidden">
+            <div class="w-full py-16 px-12">
+                <h2 class="text-4xl font-semibold mb-3">Ubah Playlist</h2>
+                <form action="#">
+                    <div class="mt-5">
+                        <input type="text" value="{{ playlist.judul }}" class="border border-gray-400 py-1 px-2 w-full">
+                    </div>
+                    <div class="mt-5">
+                        <input type="text" value="{{ playlist.deskripsi }}" class="border border-gray-400 py-1 px-2 w-full">
+                    </div>
+                    <div class="mt-5">
+                        <button class="w-full bg-orange-500 py-3 text-center text-white">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+  {% include 'footer.html' %}
+
+<script>
+
+</script>
+
+{% endblock content %}
