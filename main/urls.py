@@ -2,7 +2,7 @@ from django.urls import path
 from main import views
 from main.views import show_main, login_user, logout_user, show_dashboard
 from main.views import *
-from main.views import temporary_chart_detail_view, temporary_lihat_chart_view, temporary_crud_user_playlist_view, temporary_r_podcast_view
+from main.views import temporary_chart_detail_view, temporary_lihat_chart_view, temporary_r_podcast_view, temporary_crud_kelola_podcast_view
 
 
 app_name = 'main'
@@ -14,6 +14,6 @@ urlpatterns = [
     path('', show_dashboard, name='dashboard'),
     path('chart_detail/', temporary_chart_detail_view, name='chart_detail'),
     path('lihat_chart/', temporary_lihat_chart_view, name='lihat_chart'),
-    path('crud_user_playlist/', temporary_crud_user_playlist_view, name='crud_user_playlist'),
+    path('crud_kelola_podcast/', temporary_crud_kelola_podcast_view, name='crud_kelola_podcast'),
     path('r_podcast/', temporary_r_podcast_view, name='r_podcast'),
 ]

@@ -96,7 +96,7 @@ def temporary_chart_detail_view(request):
     return render(request, 'chart_detail.html', context)
 
 
-def temporary_crud_user_playlist_view(request):
+def temporary_crud_kelola_podcast_view(request):
     context = {
         'judul_playlist': 'Playlist1',
         'pembuat': 'Pembuat1',
@@ -110,7 +110,7 @@ def temporary_crud_user_playlist_view(request):
             {'judul': 'Song3', 'artis': 'Artist3', 'durasi': '4 menit'}
         ]
     }
-    return render(request, 'crud_user_playlist.html', context)
+    return render(request, 'crud_kelola_podcast.html', context)
 
 def temporary_lihat_chart_view(request):
     chart_data = [
