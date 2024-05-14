@@ -3,6 +3,28 @@ from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db import connection as conn
+
+def tes_query(request):
+    context = {
+        'name': 'C15',
+        'class': 'BASDAT C'
+    }
+    with conn.cursor() as cursor:
+        # Mengatur schema database
+        cursor.execute("set search_path to marmut;")
+        
+        cursor.execute("SELECT * FROM PLAYLIST;")
+        
+        results = cursor.fetchall()
+
+        print("total ada %d" % (len(results)))
+        # Mengeprint setiap baris dari hasil query
+        for result in results:
+            print(result)
+
+    # Kembali ke halaman tertentu atau tampilkan suatu response
+    return render(request, 'main.html', context)  # Sisipkan template yang sesuai
 
 @login_required(login_url='/login')
 #Main Page
