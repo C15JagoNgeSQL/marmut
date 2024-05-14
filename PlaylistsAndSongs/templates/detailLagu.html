@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block framework %}
+  <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block meta %}
+    <title>Detail Lagu</title>
+{% endblock meta %}
+
+{% block content %}
+
+<style>
+    input[type="range"] {
+        font-size: 1.5rem;
+    }
+
+    input[type="range"] {
+        color: orange;
+        --thumb-height: 1.125em;
+        --track-height: 0.125em;
+        --track-color: rgba(0, 0, 0, 0.2);
+        --clip-edges: 0.125em;
+    }
+
+    input[type="range"] {
+        position: relative;
+        background: #fff0;
+        overflow: hidden;
+    }
+
+    input[type="range"],
+    input[type="range"]::-webkit-slider-runnable-track,
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        transition: all ease 100ms;
+        height: var(--thumb-height);
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track,
+    input[type="range"]::-webkit-slider-thumb {
+        position: relative;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        --thumb-radius: calc((var(--thumb-height) * 0.5) - 1px);
+        --clip-top: calc((var(--thumb-height) - var(--track-height)) * 0.5 - 0.5px);
+        --clip-bottom: calc(var(--thumb-height) - var(--clip-top));
+        --clip-further: calc(100% + 1px);
+        --box-fill: calc(-100vmax - var(--thumb-width, var(--thumb-height))) 0 0
+            100vmax currentColor;
+
+        width: var(--thumb-width, var(--thumb-height));
+        background: linear-gradient(currentColor 0 0) scroll no-repeat left center /
+            50% calc(var(--track-height) + 1px);
+        background-color: currentColor;
+        box-shadow: var(--box-fill);
+        border-radius: var(--thumb-width, var(--thumb-height));
+
+        filter: brightness(100%);
+        clip-path: polygon(
+            100% -1px,
+            var(--clip-edges) -1px,
+            0 var(--clip-top),
+            -100vmax var(--clip-top),
+            -100vmax var(--clip-bottom),
+            0 var(--clip-bottom),
+            var(--clip-edges) 100%,
+            var(--clip-further) var(--clip-further)
+        );
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+        background: linear-gradient(var(--track-color) 0 0) scroll no-repeat center /
+            100% calc(var(--track-height) + 1px);
+    }
+</style>
+
+<body>
+    <div class="container px-20 py-24 mx-auto">
+        <div class="text-left mb-5">
+            <h1 class="text-4xl md:text-4xl text-700 font-semibold">Song Detail</h1>
+        </div>
+        <div class="flex">
+            <div class="w-full lg:w-1/3 border-2 border-gray-200 border-opacity-60 rounded-lg flex flex-col bg-no-repeat bg-cover bg-center">
+                <div class="p-4">
+                    <img src="{% static 'images/defaultPlaylist.png' %}" alt="Gambar playlist" class="w-full h-auto">
+                </div>
+                <div class="p-4 pt-0 w-full">
+                    <input type="range" min="0" max="100" value="40" step="1" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mb-5"/>
+                    <a href=""><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Play</button></a>
+                    <a href=""><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Add to Playlist</button></a>  
+                    <button onclick=openModal() class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Download</button>
+                    <a href=""><button class="w-full bg-orange-500 text-center text-white p-3 rounded-lg">Kembali</button></a>  
+                </div>  
+            </div>
+            <div class="w-full lg:w-2/3 border-2 border-gray-200 border-opacity-60 rounded-lg flex flex-col bg-no-repeat bg-cover bg-center ml-3 pl-3">
+                <h3 class="text-xl pb-3 mt-3">
+                    <span class="font-semibold">Judul:</span> 
+                    <span>{{ detail.judul }}</span>
+                </h3>
+                <h3 class="text-xl font-semibold pb-3">Genre:</h3>
+                {% for genre in detail.genres %}
+                    <h3 class="text-xl  pb-3 ml-3">- {{ genre }}</h3>
+                {% endfor %}
+                <h3 class="text-xl pb-3">
+                    <span class="font-semibold">Artist:</span>
+                    <span>{{ detail.artist }}</span>
+                </h3>
+                <h3 class="text-xl font-semibold pb-3">Songwriter(s):</h3>
+                {% for songwriter in detail.songwriters %}
+                    <h3 class="text-xl  pb-3 ml-3">- {{ songwriter }}</h3>
+                {% endfor %}
+                <h3 class="text-xl pb-3">
+                    <span class="font-semibold">Durasi: </span>
+                    <span>{{ detail.durasi }}</span>
+                </h3>
+                <h3 class="text-xl pb-3">
+                    <span class="font-semibold">Tanggal Rilis:</span>
+                    <span>{{ detail.tanggal_rilis }}</span>
+                </h3>
+                <h3 class="text-xl pb-3">
+                    <span class="font-semibold">Tahun:</span>
+                    <span>{{ detail.tahun }}</span>
+                </h3>
+                <h3 class="text-xl pb-3">
+                    <span class="font-semibold">Total Play:</span>
+                    <span>{{ detail.total_play }}</span>
+                </h3>
+                <h3 class="text-xl pb-3">
+                    <span class="font-semibold">Total Download:</span>
+                    <span>{{ detail.total_download }}</span>
+                </h3>
+                <h3 class="text-xl pb-3">
+                    <span class="font-semibold">Album:</span>
+                    <span>{{ detail.album }}</span>
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Background -->
+    <div id="modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" aria-labelledby="modalTitle" role="dialog" aria-modal="true">
+        <!-- Modal Content -->
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modalTitle">Berhasil!</h3>
+                <div class="mt-2 px-7 py-3">
+                    <p class="text-sm text-gray-500"> Berhasil mengunduh Lagu dengan judul {{ detail.judul }}!</p>
+                </div>
+                <div class="items-center px-4 py-3">
+                    <button type="button" class="px-4 py-2 bg-orange-500 text-white text-base font-medium rounded-md w-auto shadow-sm hover:bg-orange-700">
+                        Ke Daftar Download
+                    </button>
+                    <button id="closeModal" type="button" class="px-4 py-2 bg-gray-500 text-white text-base font-medium rounded-md w-auto shadow-sm hover:bg-gray-700">
+                        Kembali
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% include 'footer.html' %}
+
+<script>
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('closeModal');
+  
+    function openModal() {
+      modal.classList.remove('hidden');
+    }
+  
+    function closeModalFunc() {
+      modal.classList.add('hidden');
+    }
+  
+    closeModal.addEventListener('click', closeModalFunc);
+</script>
+
+{% endblock content %}

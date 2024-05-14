@@ -22,4 +22,5 @@ urlpatterns = [
     path('music-industry/', include('MusicIndustry.urls')),
     path('admin/', admin.site.urls),
     path('chart-and-podcast/', include('ChartAndPodcast.urls')),
+    path('playlist-and-song/', include('PlaylistsAndSongs.urls'))
 ]
