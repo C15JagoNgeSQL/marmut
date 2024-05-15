@@ -18,7 +18,7 @@
         <form method="POST" action="" class="space-y-4">
             {% csrf_token %}
             <div>
-                <input type="text" name="username" placeholder="Username" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500">
+                <input type="text" name="email" placeholder="Email" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500">
             </div>
             <div>
                 <input type="password" name="password" placeholder="Password" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500">
@@ -34,9 +34,9 @@
                     <li class="text-red-500">{{ message }}</li>
                 {% endfor %}
             </ul>
-        {% endif %}     
+        {% endif %}
 
-        <p class="text-center mt-4 text-gray-600">Don't have an account yet? <a href="#" class="text-indigo-500 hover:underline">Register Now</a></p>
+        <p class="text-center mt-4 text-gray-600">Don't have an account yet? <a href="{% url 'main:register' %}" class="text-indigo-500 hover:underline">Register Now</a></p>
     </div>
 </div>
 

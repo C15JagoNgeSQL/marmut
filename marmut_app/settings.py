@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'MusicIndustry',
-    'PlaylistsAndSongs'
+    'PlaylistsAndSongs',
     'ChartAndPodcast',
 ]
 
@@ -84,10 +84,7 @@ DATABASES = {
         'USER': 'postgres.ywokuhglxymgdxzkckhh',
         'PASSWORD': 'C15JagoSQLMarmut',
         'HOST': 'aws-0-ap-southeast-1.pooler.supabase.com',
-        'PORT': '5432',
-        'OPTIONS': {
-            'options': '-c search_path=marmut'
-        }
+        'PORT': '5432'
     }
 }
 
