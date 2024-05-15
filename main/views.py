@@ -126,38 +126,63 @@ def show_dashboard(request):
     
     email = request.session.get('email')
     
-    result = get_akun_data(email)
-    nama = result[2]
-    gender = "Male" if result[3] == 1 else "Female"
-    tempat_lahir = result[4]
-    tanggal_lahir = result[5]
-    kota_asal = result[7]
+    if (cek_akun(email)):
+        result = get_akun_data(email)
+        nama = result[2]
+        gender = "Male" if result[3] == 1 else "Female"
+        tempat_lahir = result[4]
+        tanggal_lahir = result[5]
+        kota_asal = result[7]
+        tanggal_lahir_formatted = tanggal_lahir.strftime("%d %B %Y")
+        tempat_tanggal_lahir = f"{tempat_lahir}, {tanggal_lahir_formatted}"
 
-    tanggal_lahir_formatted = tanggal_lahir.strftime("%d %B %Y")
-    tempat_tanggal_lahir = f"{tempat_lahir}, {tanggal_lahir_formatted}"
+        if (get_playlist is not None):
+            playlists = [playlist[0] for playlist in get_playlist(email)]
 
-    songs = [song[0] for song in get_songs(email)]
-
-    context = {
-        'nama': nama,
-        'email': email,
-        'kota_asal': kota_asal,
-        'gender': gender,
-        'tempat_tanggal_lahir': tempat_tanggal_lahir,
-        'isPengguna': request.session.get('isPengguna'),
-        'playlists': [],
-
-        'isArtist': request.session.get('isArtist'),
-        'isSongwriter': request.session.get('isSongwriter'),
-        'songs': songs,
+        if (request.session.get('isArtist')):
+            songs = [song[0] for song in get_songs_artist(email)]
+        elif (request.session.get('isSongwriter')):
+            songs = [song[0] for song in get_songs_songwriter(email)]
+        else:
+            songs = []
         
-        'isPodcaster': request.session.get('isPodcaster'),
-        'podcasts': ["Johnny Cash's Heaven on Earth", "A Day In The Grand Canyon", "Cash's Life Journey"],
+        if (request.session.get('isPodcaster')):
+            podcasts = [podcast[0] for podcast in get_podcasts(email)]
+        else:
+            podcasts = []
+
+        context = {
+            'nama': nama,
+            'email': email,
+            'kota_asal': kota_asal,
+            'gender': gender,
+            'tempat_tanggal_lahir': tempat_tanggal_lahir,
+            'isPengguna': request.session.get('isPengguna'),
+            'playlists': playlists,
+
+            'isArtist': request.session.get('isArtist'),
+            'isSongwriter': request.session.get('isSongwriter'),
+            'songs': songs,
+            
+            'isPodcaster': request.session.get('isPodcaster'),
+            'podcasts': podcasts,
+        }
+
+    else:
+        result = get_label_data(email)
+        print(result)
+        nama = result[1]
+        kontak = result[4]
         
-        'isLabel': request.session.get('isLabel'),
-        'kontak': "0123456789",
-        'albums': ["Dune: Part Two", "Barbie", "The Batman"]
-    }
+        albums = [album[0] for album in get_album(email)]
+    
+        context = {
+            'nama': nama,
+            'email': email,
+            'isLabel': request.session.get('isLabel'),
+            'kontak': kontak,
+            'albums': albums
+        }
     
     return render(request, "dashboard.html", context)
 
