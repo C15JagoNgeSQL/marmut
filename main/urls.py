@@ -1,6 +1,4 @@
 from django.urls import path
-from main import views
-from main.views import show_main, login_user, logout_user, show_dashboard
 from main.views import *
 
 
