@@ -21,13 +21,13 @@
                     <h3 class="text-xl font-semibold mt-5">Lagu:</h3>
                     <div class="mt-5">
                         <select class="border border-gray-400 py-1 px-2 w-full">
-                            {% for value, name in songs %}
-                            <option value="{{ value }}">{{ name }}</option>
+                            {% for song in songs %}
+                            <option value="{{ song.judul_lagu }} - {{ song.nama_artist }}">{{ song.judul_lagu }} - {{ song.nama_artist }}</option>
                             {% endfor %}
                         </select>    
                     </div>
                     <div class="mt-5">
-                        <button class="w-full bg-orange-500 py-3 text-center text-white">Submit</button>
+                        <button type="submit" class="w-full bg-orange-500 py-3 text-center text-white">Submit</button>
                     </div>
                 </form>
             </div>

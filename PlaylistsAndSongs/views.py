@@ -1,6 +1,20 @@
 from django.shortcuts import render
+from django.db import connection as conn
 
 def show_kelola_playlist(request):
+    with conn.cursor() as cursor:
+        cursor.execute("SELECT * FROM user_playlist;")
+        rows = cursor.fetchall()
+        
+        playlists = [
+            {
+            'judul': row[2],
+            'jumlah_lagu': row[4],
+            'total_durasi': row[7],
+            }
+            for row in rows
+        ]
+        '''
     playlists = [
         {
             'judul': "Morning Vibes",
@@ -12,10 +26,19 @@ def show_kelola_playlist(request):
             'jumlah_lagu': "7",
             'total_durasi': "47",
         }
-    ]
+    ]'''
     return render(request, "kelolaPlaylist.html", {'playlists': playlists})
 
 def show_tambah_playlist(request):
+    if request.method == "POST":
+        judul = request.POST.get('judul')
+        deskripsi = request.POST.get('deskripsi')
+
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO LABEL (id, email, judul, deskripsi, kontak)
+                VALUES (%s,%s,%s,%s,%s)
+            """, [id,email,judul,deskripsi,kontak])
     return render(request, "tambahPlaylist.html")
 
 def show_ubah_playlist(request):
@@ -26,6 +49,21 @@ def show_ubah_playlist(request):
     return render(request, "ubahPlaylist.html", {'playlist': playlist})
 
 def show_detail_playlist(request):
+    with conn.cursor() as cursor:
+        cursor.execute("SELECT * FROM user_playlist;")
+        rows = cursor.fetchall()
+        
+        detail = [
+            {
+            'judul': "Morning Vibes",
+            'pembuat': "Rafi",
+            'jumlah_lagu': "5",
+            'total_durasi': "44 menit",
+            'tanggal_dibuat': "26/03/2024",
+            'deskripsi': "Start your day with these uplifting tunes!",
+            }
+            for row in rows
+        ]
     detail = {
         'judul': "Morning Vibes",
         'pembuat': "Rafi",
@@ -49,10 +87,24 @@ def show_detail_playlist(request):
     return render(request, "detailPlaylist.html", {'detail': detail})
 
 def show_tambah_lagu(request):
-    songs = [
-        ('1', 'See You Again - Valerie Jordan'),
-        ('2', 'Hotline Bling - Michael Wade')
-    ]
+    with conn.cursor() as cursor:
+        cursor.execute("""
+            SELECT 
+                konten.judul AS judul_lagu, 
+                akun.nama AS nama_artist
+            FROM 
+                song
+            INNER JOIN 
+                konten ON song.id_konten = konten.id
+            INNER JOIN 
+                artist ON song.id_artist = artist.id
+            INNER JOIN 
+                akun ON artist.email_akun = akun.email;
+        """)
+        songs = cursor.fetchall()
+
+    songs = [{'judul_lagu': row[0], 'nama_artist': row[1]} for row in songs]
+
     return render(request, "tambahLagu.html", {'songs': songs})
 
 def show_detail_lagu(request):
