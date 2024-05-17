@@ -11,39 +11,6 @@ from django.db import connection as conn
 from django.views.decorators.csrf import csrf_exempt
 from main.query import *
 
-# def tes_query(request):
-#     context = {
-#         'name': 'C15',
-#         'class': 'BASDAT C'
-#     }
-    
-#     with conn.cursor() as cursor:
-#         # Mengatur schema database
-#         cursor.execute("set search_path to marmut;")
-        
-#         cursor.execute("SELECT * FROM PLAYLIST;")
-        
-#         results = cursor.fetchall()
-
-#         print("total ada %d" % (len(results)))
-#         # Mengeprint setiap baris dari hasil query
-#         for result in results:
-#             print(result)
-
-#     # Kembali ke halaman tertentu atau tampilkan suatu response
-#     return render(request, 'main.html', context)  # Sisipkan template yang sesuai
-
-# @login_required(login_url='/login')
-# #Main Page
-# def show_main(request):
-#     context = {
-#         'name': 'C15',
-#         'class': 'BASDAT C'
-#     }
-
-#     return render(request, "main.html", context)
-
-
 # Logout (normal)
 def logout_user(request): 
     if 'email' in request.session:
