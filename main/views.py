@@ -12,67 +12,44 @@ from django.views.decorators.csrf import csrf_exempt
 from main.query import *
 import uuid
 
-def tes_query(request):
-    context = {
-        'name': 'C15',
-        'class': 'BASDAT C'
-    }
+# def tes_query(request):
+#     context = {
+#         'name': 'C15',
+#         'class': 'BASDAT C'
+#     }
     
-    with conn.cursor() as cursor:
-        # Mengatur schema database
-        cursor.execute("set search_path to marmut;")
+#     with conn.cursor() as cursor:
+#         # Mengatur schema database
+#         cursor.execute("set search_path to marmut;")
         
-        cursor.execute("SELECT * FROM PLAYLIST;")
+#         cursor.execute("SELECT * FROM PLAYLIST;")
         
-        results = cursor.fetchall()
+#         results = cursor.fetchall()
 
-        print("total ada %d" % (len(results)))
-        # Mengeprint setiap baris dari hasil query
-        for result in results:
-            print(result)
+#         print("total ada %d" % (len(results)))
+#         # Mengeprint setiap baris dari hasil query
+#         for result in results:
+#             print(result)
 
-    # Kembali ke halaman tertentu atau tampilkan suatu response
-    return render(request, 'main.html', context)  # Sisipkan template yang sesuai
+#     # Kembali ke halaman tertentu atau tampilkan suatu response
+#     return render(request, 'main.html', context)  # Sisipkan template yang sesuai
 
-@login_required(login_url='/login')
-#Main Page
-def show_main(request):
-    context = {
-        'name': 'C15',
-        'class': 'BASDAT C'
-    }
+# @login_required(login_url='/login')
+# #Main Page
+# def show_main(request):
+#     context = {
+#         'name': 'C15',
+#         'class': 'BASDAT C'
+#     }
 
-    return render(request, "main.html", context)
+#     return render(request, "main.html", context)
 
-## Create your views here (normal)
-# def login_user(request):
-#    if request.method == 'POST':
-#        username = request.POST.get('username')
-#        user = authenticate(request, username=username, password=password)
-#        if user is not None:
-#            login(request, user)
-#            return redirect('main:show_main')
-#        else:
-#            messages.info(request, 'Sorry, incorrect username or password. Please try again.')
-#    context = {}
-#    return render(request, 'login.html', context)
 
 # Logout (normal)
 def logout_user(request): 
     if 'email' in request.session:
         request.session.flush()
-        print("berhasil diflush")
     return HttpResponseRedirect(reverse("main:login"))
-
-
-#For dummy user
-# def create_dummy_user(username, password):
-#     # Cek apakah pengguna dengan username yang sama sudah ada
-#     if not User.objects.filter(username=username).exists():
-#         # Buat pengguna baru
-#         user = User.objects.create_user(username=username, password=password)
-#         # Simpan pengguna
-#         user.save()
 
 #Login with dummy user
 @csrf_exempt
@@ -96,6 +73,10 @@ def login_user(request):
                     request.session['isSongwriter'] = True
                 if (cek_podcaster(email)):
                     request.session['isPodcaster'] = True
+                if (cek_premium(email)):
+                    request.session['isPremium'] = True
+                if (cek_nonpremium(email)):
+                    request.session['isNonPremium'] = True
                 
                 print("sukses")
                 return HttpResponseRedirect(reverse("main:dashboard"))
@@ -116,10 +97,6 @@ def login_user(request):
     context = {}
     return render(request, 'login.html', context)
 
-# def login_user(request):
-#     context = {}
-#     return render(request, 'login.html', context)
-
 # Create your views here.
 def show_dashboard(request):
     if 'email' not in request.session:
@@ -134,23 +111,22 @@ def show_dashboard(request):
         tempat_lahir = result[4]
         tanggal_lahir = result[5]
         kota_asal = result[7]
+        is_verified = result[6]
         tanggal_lahir_formatted = tanggal_lahir.strftime("%d %B %Y")
         tempat_tanggal_lahir = f"{tempat_lahir}, {tanggal_lahir_formatted}"
 
         if (get_playlist is not None):
             playlists = [playlist[0] for playlist in get_playlist(email)]
 
+        songs = []
         if (request.session.get('isArtist')):
-            songs = [song[0] for song in get_songs_artist(email)]
-        elif (request.session.get('isSongwriter')):
-            songs = [song[0] for song in get_songs_songwriter(email)]
-        else:
-            songs = []
+            songs += [song[0] for song in get_songs_artist(email)]
+        if (request.session.get('isSongwriter')):
+            songs += [song[0] for song in get_songs_songwriter(email)]
         
+        podcasts = []
         if (request.session.get('isPodcaster')):
-            podcasts = [podcast[0] for podcast in get_podcasts(email)]
-        else:
-            podcasts = []
+            podcasts += [podcast[0] for podcast in get_podcasts(email)]
 
         context = {
             'nama': nama,
@@ -160,6 +136,7 @@ def show_dashboard(request):
             'tempat_tanggal_lahir': tempat_tanggal_lahir,
             'isPengguna': request.session.get('isPengguna'),
             'playlists': playlists,
+            'is_verified': is_verified,
 
             'isArtist': request.session.get('isArtist'),
             'isSongwriter': request.session.get('isSongwriter'),
@@ -171,7 +148,6 @@ def show_dashboard(request):
 
     else:
         result = get_label_data(email)
-        print(result)
         nama = result[1]
         kontak = result[4]
         
