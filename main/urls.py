@@ -11,6 +11,5 @@ urlpatterns = [
     path('', show_dashboard, name='dashboard'),
     path('register/', show_register, name="register"),
     path('register/user', show_register_user, name="registerUser"),
-    path('register/label', show_register_label, name="registerLabel"),
-    path('tes/', tes_query, name='tes_query')
+    path('register/label', show_register_label, name="registerLabel")
 ]
