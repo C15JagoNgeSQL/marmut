@@ -215,9 +215,10 @@ def show_register_user(request):
             if is_podcaster:
                 register_podcaster(email)
             if is_artist:
-                register_artist(uuid.uuid4(), email)
+                register_artist(uuid.uuid4(), uuid.uuid4(), email)
             if is_songwriter:
-                register_songwriter(uuid.uuid4(), email)
+                register_songwriter(uuid.uuid4(), uuid.uuid4(), email)
+            return HttpResponseRedirect(reverse("main:login"))
 
     return render(request, "registerUser.html")
 
@@ -234,6 +235,7 @@ def show_register_label(request):
             return render(request, "registerLabel.html", {'error_message': 'Email sudah terdaftar!'})
         else:
             register_label(id,email,password,nama,kontak)
+            return HttpResponseRedirect(reverse("main:login"))
 
     return render(request, "registerLabel.html")
     
