@@ -199,3 +199,31 @@ def cek_label(email):
         result = cursor.fetchone()
         cursor.execute("set search_path to public;")
         return result is not None
+
+def cek_premium(email):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute(""" 
+        SELECT *
+        FROM PREMIUM
+        WHERE email = %s;
+        """, (email,))
+
+        result = cursor.fetchone()
+        cursor.execute("set search_path to public;")
+        return result is not None
+
+def cek_nonpremium(email):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute(""" 
+        SELECT *
+        FROM NONPREMIUM
+        WHERE email = %s;
+        """, (email,))
+
+        result = cursor.fetchone()
+        cursor.execute("set search_path to public;")
+        return result is not None
