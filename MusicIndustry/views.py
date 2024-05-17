@@ -84,8 +84,11 @@ def kelola_album(request):
             'isi_tabel' : isi_tabel
         }
     
-    elif(request.session.get('isArtist')):
-        albums = get_albums_artist(email)
+    else:
+        if (request.session.get('isArtist')):
+            albums = get_albums_artist(email)
+        if (request.session.get('isSongwriter')):
+            albums = get_albums_songwriter(email)
         data = get_akun_data(email)
 
         isi_tabel = []
@@ -125,6 +128,7 @@ def daftar_lagu(request, album_id):
     total_durasi = 0
     for song in songs:
             song_dict = {
+                'id': song[0],
                 'judul': song[1],  # Nama album
                 'durasi': song[4],  # Jumlah lagu
                 'total_play': count_total_play(song[0]),
@@ -145,3 +149,23 @@ def create_lagu(request):
         'isSongwriter' : False
     }
     return render(request, "create_lagu.html", context)
+
+def delete_lagu(request, lagu_id):
+    if request.method == 'POST':
+        print(f"akan didelete lagu", lagu_id)
+
+        #PANGGIL QUERYNYA TAPI NANTI AJA    
+        # delete_song_query(lagu_id)
+
+        previous_url = request.META.get('HTTP_REFERER', '/')
+        return HttpResponseRedirect(previous_url)
+
+def delete_album(request, album_id):
+    if request.method == 'POST':
+        print(f"akan didelete album", album_id)
+
+        #PANGGIL QUERYNYA TAPI NANTI AJA    
+        # delete_album_query(album_id)
+
+        previous_url = request.META.get('HTTP_REFERER', '/')
+        return HttpResponseRedirect(previous_url)
