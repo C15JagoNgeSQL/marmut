@@ -1,100 +1,114 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
+from MusicIndustry.query import *
 
 # Create your views here.
 
 def show_royalti(request):
+    if 'email' not in request.session:
+        return HttpResponseRedirect(reverse("main:login"))
+    
+    email = request.session.get('email')
+
+    data = []
+
+    if request.session.get('isLabel'):
+        data = get_songs_royalti_label(email)
+        nama = get_name_label(email)
+    else:
+        if request.session.get('isArtist'):
+            data += get_songs_royalti_artist(email)
+        if request.session.get('isSongwriter'):
+            data += get_songs_royalti_songwriter(email)
+        nama = get_name_akun(email)
+
+    isi_tabel = []
+    total_play = 0
+    total_download = 0
+    total_royalti = 0
+    
+    for song in data:
+        song_dict = {
+            'judul_lagu': song[1],
+            'judul_album': song[2],
+            'total_play': count_total_play(song[0]),
+            'total_download': count_total_download(song[0]),
+            'total_royalti_didapat': song[3]
+        }
+        isi_tabel.append(song_dict)
+        total_play += count_total_play(song[0])
+        total_download += count_total_download(song[0])
+        total_royalti += song[3]
+        
     context = {
-        'nama': "Taylor Swift",
-        'email': "taylorswift@gmail.com",
-        'total_keseluruhan_play': 999999,
-        'total_keseluruhan_download': 100000,
-        'isi_tabel': [
-            {
-                'judul_lagu': "I Can Do It With A Broken Heart",
-                'judul_album': "The Tortured Poets Department",
-                'total_play': 50000,
-                'total_download': 1000,
-                'total_royalti_didapat': 1000000
-            },
-            {
-                'judul_lagu': "I Can Do It With A Broken Heart",
-                'judul_album': "The Tortured Poets Department",
-                'total_play': 50000,
-                'total_download': 1000,
-                'total_royalti_didapat': 1000000
-            },
-            {
-                'judul_lagu': "I Can Do It With A Broken Heart",
-                'judul_album': "The Tortured Poets Department",
-                'total_play': 50000,
-                'total_download': 1000,
-                'total_royalti_didapat': 1000000
-            },
-            {
-                'judul_lagu': "I Can Do It With A Broken Heart",
-                'judul_album': "The Tortured Poets Department",
-                'total_play': 50000,
-                'total_download': 1000,
-                'total_royalti_didapat': 1000000
-            },
-            {
-                'judul_lagu': "I Can Do It With A Broken Heart",
-                'judul_album': "The Tortured Poets Department",
-                'total_play': 50000,
-                'total_download': 1000,
-                'total_royalti_didapat': 1000000
-            }
-        ]
+        'nama': nama,
+        'email': email,
+        'total_keseluruhan_play': total_play,
+        'total_keseluruhan_download': total_download,
+        'isi_tabel': isi_tabel,
+        'total_keseluruhan_royalti': total_royalti
     }
     return render(request, "cek_royalti.html", context)
 
 def kelola_album(request):
-    context = {
-        'nama': "Luke Chiang",
-        'email': "luchiang@gmail.com",
-        'isLabel': False,
-        'kontak': "08123456789",
-        'total_album': 2,
-        'total_lagu': 4,
-        'isi_tabel': [
-            {
-                'judul': "Album 1",
-                'label': "LabelA",
-                'jumlah_lagu': 0,
-                'total_durasi': 0,
-            },
-            {
-                'judul': "Album2",
-                'label': "LabelB",
-                'jumlah_lagu': 2,
-                'total_durasi': 4,
+    if 'email' not in request.session:
+        return HttpResponseRedirect(reverse("main:login"))
+    
+    email = request.session.get('email')
+
+    if(request.session.get('isLabel')):
+        albums = get_albums_label(email)
+        data = get_label_data(email)
+
+        isi_tabel = []
+        jumlah_lagu = 0
+
+        # Memetakan hasil query ke dalam format dictionary isi_tabel
+        for album in albums:
+            album_dict = {
+                'judul': album[1],  # Nama album
+                'jumlah_lagu': album[2],  # Jumlah lagu
+                'id': album[0],
+                'total_durasi': album[4],  # Total durasi
             }
-        ]
-    }
+            isi_tabel.append(album_dict)
+            jumlah_lagu += album[2]
+
+        context = {
+            'nama': data[1],
+            'kontak': data[4],
+            'isLabel': True,
+            'total_album': len(isi_tabel),
+            'total_lagu': jumlah_lagu,
+            'isi_tabel' : isi_tabel
+        }
+
     return render(request, "kelola_album.html", context)
 
 def create_album(request):
     return render(request, "create_album.html")
 
-def daftar_lagu(request):
-    context = {
-        'nama': "Album 1",
-        'total_lagu': 999999,
-        'total_durasi': 100000,
-        'isi_tabel': [
-            {
-                'judul': "Lagu1",
-                'durasi': "2 menit",
-                'total_play': 3,
-                'total_download': 0,
-            },
-            {
-                'judul': "Lagu1",
-                'durasi': "3 menit",
-                'total_play': 2,
-                'total_download': 2,
+def daftar_lagu(request, album_id):
+    songs = get_albums_songs(album_id)
+    nama = get_album_name(album_id)[0]
+
+    isi_tabel = []
+    total_durasi = 0
+    for song in songs:
+            song_dict = {
+                'judul': song[1],  # Nama album
+                'durasi': song[4],  # Jumlah lagu
+                'total_play': count_total_play(song[0]),
+                'total_download': count_total_download(song[0])
             }
-        ]
+            isi_tabel.append(song_dict)
+            total_durasi += song[4]
+    context = {
+        'nama': nama,
+        'total_lagu': len(isi_tabel),
+        'total_durasi': total_durasi,
+        'isi_tabel': isi_tabel
     }
     return render(request, "daftar_lagu.html", context)
 
