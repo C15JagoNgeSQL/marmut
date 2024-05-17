@@ -43,18 +43,6 @@ def show_main(request):
 
     return render(request, "main.html", context)
 
-## Create your views here (normal)
-# def login_user(request):
-#    if request.method == 'POST':
-#        username = request.POST.get('username')
-#        user = authenticate(request, username=username, password=password)
-#        if user is not None:
-#            login(request, user)
-#            return redirect('main:show_main')
-#        else:
-#            messages.info(request, 'Sorry, incorrect username or password. Please try again.')
-#    context = {}
-#    return render(request, 'login.html', context)
 
 # Logout (normal)
 def logout_user(request): 
@@ -62,16 +50,6 @@ def logout_user(request):
         request.session.flush()
         print("berhasil diflush")
     return HttpResponseRedirect(reverse("main:login"))
-
-
-#For dummy user
-# def create_dummy_user(username, password):
-#     # Cek apakah pengguna dengan username yang sama sudah ada
-#     if not User.objects.filter(username=username).exists():
-#         # Buat pengguna baru
-#         user = User.objects.create_user(username=username, password=password)
-#         # Simpan pengguna
-#         user.save()
 
 #Login with dummy user
 @csrf_exempt
@@ -118,10 +96,6 @@ def login_user(request):
     
     context = {}
     return render(request, 'login.html', context)
-
-# def login_user(request):
-#     context = {}
-#     return render(request, 'login.html', context)
 
 # Create your views here.
 def show_dashboard(request):
