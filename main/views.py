@@ -11,44 +11,43 @@ from django.db import connection as conn
 from django.views.decorators.csrf import csrf_exempt
 from main.query import *
 
-def tes_query(request):
-    context = {
-        'name': 'C15',
-        'class': 'BASDAT C'
-    }
+# def tes_query(request):
+#     context = {
+#         'name': 'C15',
+#         'class': 'BASDAT C'
+#     }
     
-    with conn.cursor() as cursor:
-        # Mengatur schema database
-        cursor.execute("set search_path to marmut;")
+#     with conn.cursor() as cursor:
+#         # Mengatur schema database
+#         cursor.execute("set search_path to marmut;")
         
-        cursor.execute("SELECT * FROM PLAYLIST;")
+#         cursor.execute("SELECT * FROM PLAYLIST;")
         
-        results = cursor.fetchall()
+#         results = cursor.fetchall()
 
-        print("total ada %d" % (len(results)))
-        # Mengeprint setiap baris dari hasil query
-        for result in results:
-            print(result)
+#         print("total ada %d" % (len(results)))
+#         # Mengeprint setiap baris dari hasil query
+#         for result in results:
+#             print(result)
 
-    # Kembali ke halaman tertentu atau tampilkan suatu response
-    return render(request, 'main.html', context)  # Sisipkan template yang sesuai
+#     # Kembali ke halaman tertentu atau tampilkan suatu response
+#     return render(request, 'main.html', context)  # Sisipkan template yang sesuai
 
-@login_required(login_url='/login')
-#Main Page
-def show_main(request):
-    context = {
-        'name': 'C15',
-        'class': 'BASDAT C'
-    }
+# @login_required(login_url='/login')
+# #Main Page
+# def show_main(request):
+#     context = {
+#         'name': 'C15',
+#         'class': 'BASDAT C'
+#     }
 
-    return render(request, "main.html", context)
+#     return render(request, "main.html", context)
 
 
 # Logout (normal)
 def logout_user(request): 
     if 'email' in request.session:
         request.session.flush()
-        print("berhasil diflush")
     return HttpResponseRedirect(reverse("main:login"))
 
 #Login with dummy user
@@ -118,19 +117,15 @@ def show_dashboard(request):
         if (get_playlist is not None):
             playlists = [playlist[0] for playlist in get_playlist(email)]
 
+        songs = []
         if (request.session.get('isArtist')):
-            songs = [song[0] for song in get_songs_artist(email)]
-        elif (request.session.get('isSongwriter')):
-            songs = [song[0] for song in get_songs_songwriter(email)]
-        else:
-            songs = []
-
-        print(songs)
+            songs += [song[0] for song in get_songs_artist(email)]
+        if (request.session.get('isSongwriter')):
+            songs += [song[0] for song in get_songs_songwriter(email)]
         
+        podcasts = []
         if (request.session.get('isPodcaster')):
-            podcasts = [podcast[0] for podcast in get_podcasts(email)]
-        else:
-            podcasts = []
+            podcasts += [podcast[0] for podcast in get_podcasts(email)]
 
         context = {
             'nama': nama,
@@ -152,12 +147,10 @@ def show_dashboard(request):
 
     else:
         result = get_label_data(email)
-        # print(result)
         nama = result[1]
         kontak = result[4]
         
         albums = [album[0] for album in get_album(email)]
-        print(albums)
     
         context = {
             'nama': nama,
