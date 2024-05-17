@@ -91,8 +91,10 @@
                 <div class="p-4 pt-0 w-full">
                     <input type="range" min="0" max="100" value="40" step="1" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mb-5"/>
                     <a href=""><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Play</button></a>
-                    <a href=""><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Add to Playlist</button></a>  
+                    <a href="{% url 'PlaylistAndSongs:tambah_lagu_ke_playlist' detail.id_song %}"><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Add to Playlist</button></a>
+                    {% if premium %}
                     <button onclick=openModal() class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Download</button>
+                    {% endif %}
                     <a href=""><button class="w-full bg-orange-500 text-center text-white p-3 rounded-lg">Kembali</button></a>  
                 </div>  
             </div>
@@ -103,7 +105,7 @@
                 </h3>
                 <h3 class="text-xl font-semibold pb-3">Genre:</h3>
                 {% for genre in detail.genres %}
-                    <h3 class="text-xl  pb-3 ml-3">- {{ genre }}</h3>
+                    <h3 class="text-xl  pb-3 ml-3">- {{ genre.genre }}</h3>
                 {% endfor %}
                 <h3 class="text-xl pb-3">
                     <span class="font-semibold">Artist:</span>
@@ -111,7 +113,7 @@
                 </h3>
                 <h3 class="text-xl font-semibold pb-3">Songwriter(s):</h3>
                 {% for songwriter in detail.songwriters %}
-                    <h3 class="text-xl  pb-3 ml-3">- {{ songwriter }}</h3>
+                    <h3 class="text-xl  pb-3 ml-3">- {{ songwriter.nama }}</h3>
                 {% endfor %}
                 <h3 class="text-xl pb-3">
                     <span class="font-semibold">Durasi: </span>

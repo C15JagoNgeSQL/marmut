@@ -61,9 +61,9 @@
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-left">{{ song.nama_artist }}</td>
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-left">{{ song.durasi }} menit</td>
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-left">
-                        <a href=""><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Lihat</span></a>
+                        <a href="{% url 'PlaylistAndSongs:detail_lagu' song.id_song %}"><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Lihat</span></a>
                         <a href=""><span class="p-1.5 ml-1 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">Play</span></a>
-                        <a href=""><span class="p-1.5 ml-1 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50">Hapus</span></a>
+                        <a href="{% url 'PlaylistAndSongs:hapus_lagu' detail.id_playlist song.id_song %}"><span class="p-1.5 ml-1 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50">Hapus</span></a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -71,7 +71,7 @@
             </table>   
         </div>
         <div class="mt-5 text-center ">
-            <a href=""><button class="w-full bg-orange-500 text-center text-white p-3 rounded-lg" style="bottom: 20px;">Tambah Lagu</button></a>
+            <a href="{% url 'PlaylistAndSongs:tambah_lagu' detail.id_playlist %}"><button class="w-full bg-orange-500 text-center text-white p-3 rounded-lg" style="bottom: 20px;">Tambah Lagu</button></a>
         </div>
     </div>
 </body>

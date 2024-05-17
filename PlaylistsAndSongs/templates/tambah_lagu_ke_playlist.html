@@ -17,15 +17,15 @@
         <div class="flex flex-col lg:flex-row w-10/12 lg:w-8/12 bg-white rounded-xl border-2 border-gray-200 border-opacity-60 mx-auto overflow-hidden">
             <div class="w-full py-16 px-12">
                 <h2 class="text-4xl font-semibold mb-3">Tambah Lagu</h2>
-                <form action="#">
+                <form method="POST">
                     <h3 class="text-xl font-semibold mt-5">Judul: {{song.judul}}</h3>
                     <h3 class="text-xl font-semibold mt-5">Artist: {{song.artist}}</h3>
                     <h3 class="text-xl font-semibold mt-5">Playlist:</h3>
                     <div class="mt-5">
-                        <select id="playlistDropdown" class="border border-gray-400 py-1 px-2 w-full" required>
+                        <select id="playlistDropdown" name="playlist" class="border border-gray-400 py-1 px-2 w-full" required>
                             <option value = "" disabled selected>Select playlist</option>
                             {% for playlist in song.playlists %}
-                                <option value="{{ playlist }}">{{ playlist }}</option>
+                                <option value="{{ playlist.id }}">{{ playlist.playlist }}</option>
                             {% endfor %}
                         </select>    
                     </div>
@@ -33,7 +33,7 @@
                         <button id="submitButton" onclick=openModal() class="w-full bg-orange-500 py-3 text-center text-white">Tambah</button>
                     </div>
                     <div class="mt-5">
-                        <button id="submitButton" class="w-full bg-gray-500 py-3 text-center text-white">Kembali</button>
+                        <button type="submit" id="submitButton" class="w-full bg-gray-500 py-3 text-center text-white">Kembali</button>
                     </div>
                 </form>
             </div>
