@@ -83,6 +83,34 @@ def kelola_album(request):
             'total_lagu': jumlah_lagu,
             'isi_tabel' : isi_tabel
         }
+    
+    elif(request.session.get('isArtist')):
+        albums = get_albums_artist(email)
+        data = get_akun_data(email)
+
+        isi_tabel = []
+        jumlah_lagu = 0
+
+        # Memetakan hasil query ke dalam format dictionary isi_tabel
+        for album in albums:
+            album_dict = {
+                'judul': album[1],  # Nama album
+                'label': album[2],
+                'jumlah_lagu': album[3],  # Jumlah lagu
+                'total_durasi': album[4],  # Total durasi
+                'id': album[0],
+            }
+            isi_tabel.append(album_dict)
+            jumlah_lagu += album[3]
+
+        context = {
+            'nama': data[2],
+            'email': data[0],
+            'isLabel': False,
+            'total_album': len(isi_tabel),
+            'total_lagu': jumlah_lagu,
+            'isi_tabel' : isi_tabel
+        }
 
     return render(request, "kelola_album.html", context)
 

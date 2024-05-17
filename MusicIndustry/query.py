@@ -142,6 +142,23 @@ def get_songs_royalti_songwriter(email):
         cursor.execute("set search_path to public;")
         return result
     
+def get_albums_artist(email):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute(""" 
+        select distinct album.id, album.judul, label.nama, album.jumlah_lagu, album.total_durasi
+        from album
+        join song on song.id_album = album.id
+        join artist on song.id_artist = artist.id
+        join label on label.id = album.id_label
+        where artist.email_akun = %s;
+        """, (email,))
+
+        result = cursor.fetchall()
+        cursor.execute("set search_path to public;")
+        return result
+    
 def get_name_akun(email):
     with conn.cursor() as cursor:
         cursor.execute("set search_path to marmut;")
