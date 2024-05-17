@@ -16,6 +16,11 @@
     <div class="container px-20 py-24 mx-auto">
         <div class="flex flex-col lg:flex-row w-10/12 lg:w-8/12 bg-white rounded-xl border-2 border-gray-200 border-opacity-60 mx-auto overflow-hidden">
             <div class="w-full py-16 px-12">
+                {% if error_message %}
+                <div class="bg-red-500 text-white p-3 rounded mb-4">
+                    {{ error_message }}
+                </div>
+                {% endif %}
                 <h2 class="text-4xl font-semibold mb-3">Tambah Lagu</h2>
                 <form method="POST">
                     <h3 class="text-xl font-semibold mt-5">Judul: {{song.judul}}</h3>
@@ -25,7 +30,7 @@
                         <select id="playlistDropdown" name="playlist" class="border border-gray-400 py-1 px-2 w-full" required>
                             <option value = "" disabled selected>Select playlist</option>
                             {% for playlist in song.playlists %}
-                                <option value="{{ playlist.id }}">{{ playlist.playlist }}</option>
+                                <option value="{{ playlist.id_user_playlist }}">{{ playlist.playlist }}</option>
                             {% endfor %}
                         </select>    
                     </div>

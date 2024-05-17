@@ -339,6 +339,7 @@ def show_detail_lagu(request, song_id):
     else:
         return render(request, "detailLagu.html", {'detail': detail})
 
+@csrf_exempt
 def show_tambah_lagu_ke_playlist(request, id_song):
     with conn.cursor() as cursor:
         cursor.execute("""
@@ -362,7 +363,7 @@ def show_tambah_lagu_ke_playlist(request, id_song):
 
         cursor.execute("""
             SELECT 
-                id,judul
+                id_user_playlist,judul
             FROM 
                 user_playlist
             WHERE 
@@ -375,7 +376,7 @@ def show_tambah_lagu_ke_playlist(request, id_song):
             'artist': songs[1],
             'playlists': [
                 {
-                'id': playlist[0],
+                'id_user_playlist': playlist[0],
                 'playlist': playlist[1]
                 }
                 for playlist in playlists
@@ -383,21 +384,31 @@ def show_tambah_lagu_ke_playlist(request, id_song):
         }
 
         if request.method == 'POST':
-            playlist_id = request.POST.get('playlist')
+            id_user_playlist = request.POST.get('playlist')
 
-            if check_lagu_exist_in_playlist(id_song, playlist_id):
-                return render(request, "tambahLagu.html", {'error_message': 'Lagu sudah terdapat dalam playlist!', 'songs': songs})
+            cursor.execute("""
+                SELECT 
+                    id_playlist
+                FROM 
+                    user_playlist
+                WHERE 
+                    id_user_playlist = %s;
+            """, [id_user_playlist])
+            id_playlist = cursor.fetchone()
+            
+            if check_lagu_exist_in_playlist(id_song, id_playlist):
+                return render(request, "tambah_lagu_ke_playlist.html", {'song': song, 'error_message': 'Lagu sudah terdapat dalam playlist!', 'songs': songs})
             else:
                 cursor.execute("""
                     INSERT INTO playlist_song (id_playlist, id_song)
                     VALUES (%s,%s)
-                """, [playlist_id, id_song])
+                """, [id_playlist, id_song])
                 
                 cursor.execute("""
                     SELECT COUNT(id_song)
                     FROM playlist_song
                     WHERE id_playlist = %s
-                """, [playlist_id])
+                """, [id_playlist])
                 jumlah_lagu = cursor.fetchone()
 
                 cursor.execute("""
@@ -406,16 +417,16 @@ def show_tambah_lagu_ke_playlist(request, id_song):
                     JOIN song ON playlist_song.id_song = song.id_konten
                     JOIN konten ON konten.id = song.id_konten
                     WHERE playlist_song.id_playlist = %s
-                """, [playlist_id])
+                """, [id_playlist])
                 total_durasi = cursor.fetchone()
                 
                 cursor.execute("""
                     UPDATE user_playlist
                     SET jumlah_lagu = %s, total_durasi = %s
                     WHERE id_user_playlist = %s
-                """, [jumlah_lagu[0], total_durasi[0], playlist_id])
-                return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_playlist", kwargs={'playlist_id': rows[1]}))
-
+                """, [jumlah_lagu[0], total_durasi[0], id_user_playlist])
+                return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_lagu", kwargs={'song_id': id_song}))
+                
         return render(request, "tambah_lagu_ke_playlist.html", {'song': song})
 
 def show_play_user_playlist(request):
