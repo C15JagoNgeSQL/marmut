@@ -1,5 +1,9 @@
 from django.shortcuts import render
 
+from django.db import connections
+from django.shortcuts import render
+from datetime import datetime
+
 # Create your views here.
 
 def chart_detail_view(request):
@@ -39,27 +43,62 @@ def lihat_chart_view(request):
     return render(request, 'lihat_chart.html', {'chart_data': chart_data})
 
 
-def r_podcast_view(request):
-    podcast_data = {
-        'judul': 'The Daily',
-        'genres': ['Comedy', 'Motivation'],
-        'podcaster': 'Jeffrey Mitchell',
-        'durasi': '8 jam 20 menit',
-        'tanggal_rilis': '18/03/24',
-        'tahun': '2024',
-        'episodes': [
-            {
-                'judul_episode': 'The Power of Positive Thinking',
-                'deskripsi': 'Join us as we explore the transformative effects of maintaining a positive mindset in our daily lives',
-                'durasi': '24 menit',
-                'tanggal': '30/06/2021'
-            },
-            {
-                'judul_episode': 'Journey Through Ancient Civilizations',
-                'deskripsi': 'Embark on a captivating journey through the ruins and relics of ancient civilizations as we unravel their mysteries',
-                'durasi': '1 jam 43 menit',
-                'tanggal': '01/10/2019'
-            }
-        ]
-    }
+#Done first
+def r_podcast_view(request, podcast_id):
+    podcast_data = {}
+
+    with connections['default'].cursor() as cursor:
+        # Mengatur schema database
+        cursor.execute("SET search_path TO marmut;")
+        
+        # Mengambil data podcast berdasarkan podcast_id
+        cursor.execute("""
+            SELECT p.id_konten, u.nama, p.email_podcaster
+            FROM podcast p
+            JOIN users u ON p.email_podcaster = u.email
+            WHERE p.id_konten = %s;
+        """, [podcast_id])
+        podcast = cursor.fetchone()
+
+        if podcast:
+            podcast_data['id_konten'] = podcast[0]
+            podcast_data['podcaster'] = podcast[1]
+            podcast_data['email_podcaster'] = podcast[2]
+
+            # Mengambil data episode yang terkait dengan id_konten
+            cursor.execute("""
+                SELECT e.judul, e.deskripsi, e.durasi, e.tanggal_rilis
+                FROM episode e
+                WHERE e.id_konten_podcast = %s;
+            """, [podcast_data['id_konten']])
+            episodes = cursor.fetchall()
+
+            total_durasi_menit = 0
+            episode_list = []
+
+            for episode in episodes:
+                judul_episode = episode[0]
+                deskripsi = episode[1]
+                durasi_menit = episode[2]
+                tanggal_rilis = episode[3]
+
+                total_durasi_menit += durasi_menit
+
+                durasi_jam = durasi_menit // 60
+                durasi_menit = durasi_menit % 60
+                durasi_str = f"{durasi_jam} jam {durasi_menit} menit" if durasi_jam > 0 else f"{durasi_menit} menit"
+
+                episode_data = {
+                    'judul_episode': judul_episode,
+                    'deskripsi': deskripsi,
+                    'durasi': durasi_str,
+                    'tanggal': tanggal_rilis.strftime('%d/%m/%Y')
+                }
+                episode_list.append(episode_data)
+
+            total_jam = total_durasi_menit // 60
+            total_menit = total_durasi_menit % 60
+            podcast_data['durasi'] = f"{total_jam} jam {total_menit} menit" if total_jam > 0 else f"{total_menit} menit"
+            podcast_data['episodes'] = episode_list
+
     return render(request, 'r_podcast.html', {'podcast_data': podcast_data})
