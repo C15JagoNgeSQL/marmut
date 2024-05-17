@@ -19,7 +19,7 @@
         </div>
         <div class="flex flex-wrap -m-4">
             <div class="p-4 sm:w-1/2 lg:w-1/2">
-                <a href="/register/user" class="no-underline">
+                <a href="{% url 'main:registerUser' %}" class="no-underline">
                     <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
                         <img class="lg:h-72 md:h-48 w-full object-cover object-center"
                             src="{% static 'images/penggunaRegis.jpg' %}" alt="Pengguna">
@@ -30,7 +30,7 @@
                 </a>
             </div>
             <div class="p-4 sm:w-1/2 lg:w-1/2">
-                <a href="/register/label" class="no-underline">
+                <a href="{% url 'main:registerLabel' %}" class="no-underline">
                     <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
                         <img class="lg:h-72 md:h-48 w-full object-cover object-center"
                             src="{% static 'images/labelRegis.jpg' %}" alt="Pengguna">

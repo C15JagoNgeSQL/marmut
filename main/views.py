@@ -200,6 +200,7 @@ def show_register_user(request):
         tempat_lahir = request.POST.get('tempat_lahir')
         tanggal_lahir = request.POST.get('tanggal_lahir')
         kota_asal = request.POST.get('kota_asal')
+
         roles = request.POST.getlist('roles')
         is_podcaster = 'podcaster' in roles
         is_artist = 'artist' in roles
@@ -207,43 +208,17 @@ def show_register_user(request):
 
         is_verified = is_podcaster or is_artist or is_songwriter
 
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT email FROM AKUN WHERE email = %s", [email])
-            existing_email = cursor.fetchone()
+        if cek_existing_email(email):
+            return render(request, "registerUser.html", {'error_message': 'Email sudah terdaftar!'})
+        else:
+            register_user(email, password, nama, gender, tempat_lahir, tanggal_lahir, is_verified, kota_asal)
+            if is_podcaster:
+                register_podcaster(email)
+            if is_artist:
+                register_artist(uuid.uuid4(), email)
+            if is_songwriter:
+                register_songwriter(uuid.uuid4(), email)
 
-            if existing_email:
-                return render(request, "registerUser.html", {'error_message': 'Email sudah terdaftar!'})
-            else:
-                cursor.execute("""
-                    INSERT INTO AKUN (email, password, nama, gender, tempat_lahir, tanggal_lahir, is_verified, kota_asal)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                """, [email, password, nama, gender, tempat_lahir, tanggal_lahir, is_verified, kota_asal])
-                
-                cursor.execute("""
-                    INSERT INTO nonpremium (email)
-                    VALUES (%s)
-                """, [email])
-                
-                if is_podcaster:
-                    cursor.execute("""
-                        INSERT INTO podcaster (email)
-                        VALUES (%s)
-                    """, [email])
-                    
-                if is_artist:
-                    id = uuid.uuid4()
-                    cursor.execute("""
-                        INSERT INTO artist (id, email_akun)
-                        VALUES (%s, %s)
-                    """, [id, email])
-                    
-                if is_songwriter:
-                    id = uuid.uuid4()
-                    cursor.execute("""
-                        INSERT INTO songwriter (id, email_akun)
-                        VALUES (%s, %s)
-                    """, [id, email])
-                
     return render(request, "registerUser.html")
 
 @csrf_exempt
@@ -255,27 +230,10 @@ def show_register_label(request):
         nama = request.POST.get('nama')
         kontak = request.POST.get('kontak')
 
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT email FROM LABEL WHERE email = %s", [email])
-            existing_email = cursor.fetchone()
-
-            if existing_email:
-                return render(request, "registerLabel.html", {'error_message': 'Email sudah terdaftar!'})
-            else:
-                cursor.execute("""
-                    INSERT INTO LABEL (id, email, password, nama, kontak)
-                    VALUES (%s,%s,%s,%s,%s)
-                """, [id,email,password,nama,kontak])
-        """
-        cursor.execute("SELECT nama FROM label;")
-        rows = cursor.fetchall()
-        
-        items = [
-            {
-            'name': row[0],
-            }
-            for row in rows
-        ]"""
+        if cek_existing_email(email):
+            return render(request, "registerLabel.html", {'error_message': 'Email sudah terdaftar!'})
+        else:
+            register_label(id,email,password,nama,kontak)
 
     return render(request, "registerLabel.html")
     
