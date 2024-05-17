@@ -95,6 +95,10 @@ def login_user(request):
                     request.session['isSongwriter'] = True
                 if (cek_podcaster(email)):
                     request.session['isPodcaster'] = True
+                if (cek_premium(email)):
+                    request.session['isPremium'] = True
+                if (cek_nonpremium(email)):
+                    request.session['isNonPremium'] = True
                 
                 print("sukses")
                 return HttpResponseRedirect(reverse("main:dashboard"))
@@ -133,6 +137,7 @@ def show_dashboard(request):
         tempat_lahir = result[4]
         tanggal_lahir = result[5]
         kota_asal = result[7]
+        is_verified = result[6]
         tanggal_lahir_formatted = tanggal_lahir.strftime("%d %B %Y")
         tempat_tanggal_lahir = f"{tempat_lahir}, {tanggal_lahir_formatted}"
 
@@ -145,6 +150,8 @@ def show_dashboard(request):
             songs = [song[0] for song in get_songs_songwriter(email)]
         else:
             songs = []
+
+        print(songs)
         
         if (request.session.get('isPodcaster')):
             podcasts = [podcast[0] for podcast in get_podcasts(email)]
@@ -159,6 +166,7 @@ def show_dashboard(request):
             'tempat_tanggal_lahir': tempat_tanggal_lahir,
             'isPengguna': request.session.get('isPengguna'),
             'playlists': playlists,
+            'is_verified': is_verified,
 
             'isArtist': request.session.get('isArtist'),
             'isSongwriter': request.session.get('isSongwriter'),
@@ -170,11 +178,12 @@ def show_dashboard(request):
 
     else:
         result = get_label_data(email)
-        print(result)
+        # print(result)
         nama = result[1]
         kontak = result[4]
         
         albums = [album[0] for album in get_album(email)]
+        print(albums)
     
         context = {
             'nama': nama,
