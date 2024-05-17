@@ -83,6 +83,37 @@ def kelola_album(request):
             'total_lagu': jumlah_lagu,
             'isi_tabel' : isi_tabel
         }
+    
+    else:
+        if (request.session.get('isArtist')):
+            albums = get_albums_artist(email)
+        if (request.session.get('isSongwriter')):
+            albums = get_albums_songwriter(email)
+        data = get_akun_data(email)
+
+        isi_tabel = []
+        jumlah_lagu = 0
+
+        # Memetakan hasil query ke dalam format dictionary isi_tabel
+        for album in albums:
+            album_dict = {
+                'judul': album[1],  # Nama album
+                'label': album[2],
+                'jumlah_lagu': album[3],  # Jumlah lagu
+                'total_durasi': album[4],  # Total durasi
+                'id': album[0],
+            }
+            isi_tabel.append(album_dict)
+            jumlah_lagu += album[3]
+
+        context = {
+            'nama': data[2],
+            'email': data[0],
+            'isLabel': False,
+            'total_album': len(isi_tabel),
+            'total_lagu': jumlah_lagu,
+            'isi_tabel' : isi_tabel
+        }
 
     return render(request, "kelola_album.html", context)
 
@@ -97,6 +128,7 @@ def daftar_lagu(request, album_id):
     total_durasi = 0
     for song in songs:
             song_dict = {
+                'id': song[0],
                 'judul': song[1],  # Nama album
                 'durasi': song[4],  # Jumlah lagu
                 'total_play': count_total_play(song[0]),
@@ -117,3 +149,23 @@ def create_lagu(request):
         'isSongwriter' : False
     }
     return render(request, "create_lagu.html", context)
+
+def delete_lagu(request, lagu_id):
+    if request.method == 'POST':
+        print(f"akan didelete lagu", lagu_id)
+
+        #PANGGIL QUERYNYA TAPI NANTI AJA    
+        # delete_song_query(lagu_id)
+
+        previous_url = request.META.get('HTTP_REFERER', '/')
+        return HttpResponseRedirect(previous_url)
+
+def delete_album(request, album_id):
+    if request.method == 'POST':
+        print(f"akan didelete album", album_id)
+
+        #PANGGIL QUERYNYA TAPI NANTI AJA    
+        # delete_album_query(album_id)
+
+        previous_url = request.META.get('HTTP_REFERER', '/')
+        return HttpResponseRedirect(previous_url)

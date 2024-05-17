@@ -142,6 +142,41 @@ def get_songs_royalti_songwriter(email):
         cursor.execute("set search_path to public;")
         return result
     
+def get_albums_artist(email):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute(""" 
+        select distinct album.id, album.judul, label.nama, album.jumlah_lagu, album.total_durasi
+        from album
+        join song on song.id_album = album.id
+        join artist on song.id_artist = artist.id
+        join label on label.id = album.id_label
+        where artist.email_akun = %s;
+        """, (email,))
+
+        result = cursor.fetchall()
+        cursor.execute("set search_path to public;")
+        return result
+    
+def get_albums_songwriter(email):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute(""" 
+        select distinct album.id, album.judul, label.nama, album.jumlah_lagu, album.total_durasi
+        from album
+        join song on song.id_album = album.id
+        join songwriter_write_song on song.id_konten = songwriter_write_song.id_song
+        join songwriter on songwriter.id = songwriter_write_song.id_songwriter
+        join label on label.id = album.id_label
+        where songwriter.email_akun = %s;
+        """, (email,))
+
+        result = cursor.fetchall()
+        cursor.execute("set search_path to public;")
+        return result
+    
 def get_name_akun(email):
     with conn.cursor() as cursor:
         cursor.execute("set search_path to marmut;")
@@ -217,3 +252,25 @@ def count_total_download(id_lagu):
         if result:
             return result[0]  # Mengambil elemen pertama dari tuple
         return 0
+
+def delete_song_query(id_lagu):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute(""" 
+        delete from konten
+        where konten.id = %s
+        """, (id_lagu,))
+
+        cursor.execute("set search_path to public;")
+    
+def delete_album_query(id_album):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute(""" 
+        delete from album
+        where album.id = %s;
+        """, (id_album,))
+
+        cursor.execute("set search_path to public;")
