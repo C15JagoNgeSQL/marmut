@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<nav class="bg-gray-900 text-white py-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <a class="text-xl font-bold" href="#">Marmut - Best Music Player in Wakanda</a>
+        <button class="lg:hidden focus:outline-none focus:bg-gray-800 px-3 py-2 rounded-md" id="menu-toggle">
+            <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+        </button>
+        <div class="hidden lg:flex lg:flex-grow lg:items-center lg:w-auto" id="menu">
+            <ul class="lg:flex flex-wrap list-none lg:ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link block px-4 py-2 text-white hover:bg-gray-800" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link block px-4 py-2 text-white hover:bg-gray-800" href="#">Your Plasylist</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle block px-4 py-2 text-white hover:bg-gray-800" href="#" role="button">
+                        Dropdown
+                    </a>
+                    <ul class="dropdown-menu hidden absolute z-50 bg-gray-800 rounded-lg shadow-lg">
+                        <li><a class="dropdown-item block px-4 py-2 text-white hover:bg-gray-700" href="#">Action</a></li>
+                        <li><a class="dropdown-item block px-4 py-2 text-white hover:bg-gray-700" href="#">Another action</a></li>
+                        <li><hr class="border-gray-700 my-2"></li>
+                        <li><a class="dropdown-item block px-4 py-2 text-white hover:bg-gray-700" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link block px-4 py-2 text-white hover:bg-gray-800" href="#" aria-disabled="true">Premium</a>
+                </li>
+            </ul>
+            <form class="lg:ml-6 flex items-center mt-4 lg:mt-0">
+                <input class="rounded-l-full py-2 px-4 text-gray-900 leading-tight focus:outline-none" type="text" placeholder="Search">
+                <button class="bg-blue-500 hover:bg-blue-700 rounded-r-full text-white px-4 py-2 focus:outline-none" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container mx-auto mt-8">
+    <h1 class="text-3xl font-bold mb-4">Tugas Kelompok Basis Data</h1>
+    <h5 class="mb-2">Name: </h5>
+    <!-- <p>{{ name }}</p> -->
+    <h5 class="mb-2">Class: </h5>
+    <!-- <p>{{ class }}</p> -->
+
+    <a href="{% url 'main:logout' %}">
+        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">Logout</button>
+    </a>
+</div>
+
+<script>
+    document.getElementById('menu-toggle').addEventListener('click', function () {
+        document.getElementById('menu').classList.toggle('hidden');
+    });
+</script>
+
+{% endblock content %}

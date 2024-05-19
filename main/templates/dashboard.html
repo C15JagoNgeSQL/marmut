@@ -1,0 +1,270 @@
+{% extends 'base.html' %} {% load static %} {% block framework %}
+<script src="https://cdn.tailwindcss.com"></script>
+{% endblock %} {% block meta %}
+<title>Marmut</title>
+{% endblock meta %} {% block content %}
+
+<body>
+  <div class="bg-gray-100 pb-10">
+    <div class="container mx-auto px-4 mt-20 space-y-4">
+      <div class="text-center bg-white rounded-md shadow p-5">
+        <div class="flex space-x-3">
+          <div class="inline-block rounded-full overflow-hidden h-48 w-48">
+            <!-- Profile Picture -->
+            <img src="{% static 'images/contohPP2.jpg' %}" alt="My image" />
+          </div>
+          <div class="content-center flex-column">
+            <div class="text-start space-y-3">
+              <div id="role"></div>
+              <div class="flex items-center">
+                <h1 class="text-5xl font-bold">{{ nama }}</h1>
+                {% if is_premium %}
+                <div class="relative group ml-2">
+                  <svg fill="#000000" height="24px" width="24px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                    viewBox="0 0 370.04 370.04" xml:space="preserve">
+                  <g>
+                    <g id="Layer_5_21_">
+                      <g>
+                        <path d="M341.668,314.412c0,0-41.071-70.588-48.438-83.248c8.382-2.557,17.311-4.815,21.021-11.221
+                          c6.183-10.674-4.823-28.184-1.933-39.625c2.977-11.775,20.551-21.964,20.551-33.933c0-11.661-18.169-25.284-21.148-36.99
+                          c-2.91-11.439,8.063-28.968,1.86-39.629c-6.203-10.662-26.864-9.786-35.369-17.97c-8.751-8.422-8.724-29.028-19.279-34.672
+                          c-10.598-5.665-27.822,5.784-39.589,3.072C207.711,17.515,197.318,0,185.167,0c-12.331,0-31.944,19.868-35.02,20.583
+                          c-11.761,2.734-29.007-8.687-39.594-2.998c-10.545,5.663-10.48,26.271-19.215,34.707c-8.491,8.199-29.153,7.361-35.337,18.035
+                          c-6.183,10.672,4.823,28.178,1.934,39.625c-2.897,11.476-21.083,23.104-21.083,36.376c0,11.97,17.618,22.127,20.613,33.896
+                          c2.911,11.439-8.062,28.966-1.859,39.631c3.377,5.805,11.039,8.188,18.691,10.479c0.893,0.267,2.582,1.266,1.438,2.933
+                          c-5.235,9.036-47.37,81.755-47.37,81.755c-3.352,5.784-0.63,10.742,6.047,11.023l32.683,1.363
+                          c6.677,0.281,15.053,5.133,18.617,10.786l17.44,27.674c3.564,5.653,9.219,5.547,12.57-0.236c0,0,48.797-84.246,48.817-84.27
+                          c0.979-1.144,1.963-0.909,2.434-0.509c5.339,4.546,12.782,9.081,18.994,9.081c6.092,0,11.733-4.269,17.313-9.03
+                          c0.454-0.387,1.559-1.18,2.367,0.466c0.013,0.026,48.756,83.811,48.756,83.811c3.36,5.776,9.016,5.874,12.569,0.214
+                          l17.391-27.707c3.554-5.657,11.921-10.528,18.598-10.819l32.68-1.424C342.315,325.152,345.028,320.187,341.668,314.412z
+                          M239.18,238.631c-36.136,21.023-79.511,18.77-112.641-2.127c-48.545-31.095-64.518-95.419-35.335-145.788
+                          c29.516-50.95,94.399-68.928,145.808-40.929c0.27,0.147,0.537,0.299,0.805,0.449c0.381,0.211,0.761,0.425,1.14,0.641
+                          c15.86,9.144,29.613,22.415,39.461,39.342C308.516,141.955,290.915,208.533,239.18,238.631z"/>
+                        <path d="M230.916,66.103c-0.15-0.087-0.302-0.168-0.452-0.254C203.002,49.955,168,48.793,138.665,65.86
+                          c-43.532,25.326-58.345,81.345-33.019,124.876c7.728,13.284,18.318,23.888,30.536,31.498c1.039,0.658,2.09,1.305,3.164,1.927
+                          c43.579,25.247,99.568,10.333,124.814-33.244C289.405,147.338,274.495,91.35,230.916,66.103z M241.818,137.344l-15.259,14.873
+                          c-4.726,4.606-7.68,13.698-6.563,20.203l3.602,21.001c1.116,6.505-2.75,9.314-8.592,6.243l-18.861-9.916
+                          c-5.842-3.071-15.401-3.071-21.243,0l-18.86,9.916c-5.842,3.071-9.709,0.262-8.593-6.243l3.602-21.001
+                          c1.116-6.505-1.838-15.597-6.564-20.203l-15.258-14.873c-4.727-4.606-3.249-9.152,3.282-10.102l21.086-3.064
+                          c6.531-0.949,14.265-6.568,17.186-12.486l9.43-19.107c2.921-5.918,7.701-5.918,10.621,0l9.431,19.107
+                          c2.921,5.918,10.654,11.537,17.186,12.486l21.086,3.064C245.067,128.192,246.544,132.738,241.818,137.344z"/>
+                      </g>
+                    </g>
+                  </g>
+                  </svg>
+                  <div class="absolute hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 right-0 bottom-8">
+                    Premium Account
+                  </div>
+                </div>
+                {% endif %}
+                {% if is_verified %}
+                <div class="relative group ml-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+                  </svg>
+                  <div class="absolute hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 right-0 bottom-8">
+                    Verified Account
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+              <p class="text-md font-semibold text-gray-500 dark:text-gray-400">
+                {{ email }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex space-x-3">
+        <!-- About Card -->
+        <div class="mr-2 p-4 bg-white rounded-md shadow rounded w-1/4 h-1/2">
+          <h2 class="text-3xl font-bold pb-3">About</h2>
+          <div class="grid gap-3">
+            {% if isLabel %}
+            <div class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+              </svg>
+              <span>{{ kontak }}</span>
+            </div>
+            {% else %}
+            <!-- Kota Asal dengan Ikon -->
+            <div class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+              </svg>
+              <span>{{ kota_asal }}</span>
+            </div>
+
+            <!-- Gender dengan Ikon -->
+            <div class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+              </svg>
+              <span>{{ gender }}</span>
+            </div>
+
+            <!-- Tempat dan Tanggal Lahir dengan Ikon -->
+            <div class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75-1.5.75a3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0L3 16.5m15-3.379a48.474 48.474 0 0 0-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 0 1 3 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 0 1 6 13.12" />
+              </svg>
+              <span>{{ tempat_tanggal_lahir }}</span>
+            </div>
+
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="w-3/4 space-y-3 bg-white rounded-md shadow">
+          <!-- Playlists -->
+          {% if isPengguna %}
+          <div id="playlist" class="ml-2 p-4 rounded"></div>
+          {% endif %}
+          <!-- Songs-->
+          {% if isArtist or isSongwriter %}
+          <div id="song" class="ml-2 p-4 rounded"></div>
+          {% endif %}
+          <!-- Podcasts -->
+          {% if isPodcaster %}
+          <div id="podcast" class="ml-2 p-4 rounded"></div>
+          {% endif %}
+          <!-- Albums -->
+          {% if isLabel %}
+          <div id="album" class="ml-2 p-4 rounded"></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+{% include 'footer.html' %}
+
+<script>
+  var isPengguna = "{{ isPengguna }}" === "True";
+  var isArtist = "{{ isArtist }}" === "True";
+  var isSongwriter = "{{ isSongwriter }}" === "True";
+  var isPodcaster = "{{ isPodcaster }}" === "True";
+  var isLabel = "{{ isLabel }}" === "True";
+
+  var roles = [];
+  if (isPengguna) roles.push("User");
+  if (isArtist) roles.push("Artist");
+  if (isSongwriter) roles.push("Songwriter");
+  if (isPodcaster) roles.push("Podcaster");
+  if (isLabel) roles.push("Label");
+
+  var roleText = roles.join(", ");
+  document.getElementById(
+    "role"
+  ).innerHTML = `<p class="text-md font-semibold text-gray-500 dark:text-gray-400">${roleText}</p>`;
+
+  if (isArtist || isSongwriter) {
+    document.getElementById("song").innerHTML = `
+            <h2 class="text-3xl font-bold pb-3">Songs</h2>
+            {% if songs %}
+                <div class="grid grid-cols-4 gap-9">
+                {% for song in songs %}
+                  <a href="" class="group relative rounded-lg overflow-hidden shadow-lg hover:bg-orange-500">
+                      <div class="transition transform translate-y-8 ease-in absolute inset-0 flex justify-end items-center group-hover:translate-y-5 invisible group-hover:visible pt-4 pr-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 bg-orange-500 text-white p-3 rounded-full">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+                          </svg>
+                      </div>
+                      <img class="w-full" src="{% static 'images/defaultPlaylist.png' %}">
+                      <div class="px-6 py-4">
+                          <div class="font-semibold text-xl mb-2 group-hover:text-white">{{ song }}</div>
+                      </div>
+                  </a>
+                {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center text-4xl justify-center">
+                <div><p class="font-semibold">Belum Memiliki Lagu.</p></div>
+                <div class="mx-auto w-1/3"><img class="" src="{% static 'images/no_data_playlist.png' %}" alt="No Data"></div>
+                </div>
+            {% endif %}`;
+  }
+  if (isPodcaster) {
+    document.getElementById("podcast").innerHTML = `
+            <h2 class="text-3xl font-bold pb-3">Podcasts</h2>
+            {% if podcasts %}
+                <div class="grid grid-cols-4 gap-9">
+                {% for podcast in podcasts %}
+                  <a href="" class="group relative rounded-lg overflow-hidden shadow-lg hover:bg-orange-500">
+                      <div class="transition transform translate-y-8 ease-in absolute inset-0 flex justify-end items-center group-hover:translate-y-5 invisible group-hover:visible pt-4 pr-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 bg-orange-500 text-white p-3 rounded-full">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+                          </svg>
+                      </div>
+                      <img class="w-full" src="{% static 'images/defaultPlaylist.png' %}">
+                      <div class="px-6 py-4">
+                          <div class="font-semibold text-xl mb-2 group-hover:text-white">{{ podcast }}</div>
+                      </div>
+                  </a>
+                {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center text-4xl justify-center">
+                <div><p class="font-semibold">Belum Memiliki Podcast.</p></div>
+                <div class="mx-auto w-1/3"><img class="" src="{% static 'images/no_data_podcast.png' %}" alt="No Data"></div>
+                </div>
+            {% endif %}`;
+  }
+  if (isLabel) {
+    document.getElementById("album").innerHTML = `
+            <h2 class="text-3xl font-bold pb-3">Albums</h2>
+            {% if albums %}
+                <div class="grid grid-cols-4 gap-9">
+                {% for album in albums %}
+                  <a href="" class="group relative rounded-lg overflow-hidden shadow-lg hover:bg-orange-500">
+                      <div class="transition transform translate-y-8 ease-in absolute inset-0 flex justify-end items-center group-hover:translate-y-5 invisible group-hover:visible pt-4 pr-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 bg-orange-500 text-white p-3 rounded-full">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+                          </svg>
+                      </div>
+                      <img class="w-full" src="{% static 'images/defaultPlaylist.png' %}">
+                      <div class="px-6 py-4">
+                          <div class="font-semibold text-xl mb-2 group-hover:text-white">{{ album }}</div>
+                      </div>
+                  </a>
+                {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center text-4xl justify-center">
+                <div><p class="font-semibold">Belum Memproduksi Album.</p></div>
+                <div class="mx-auto w-1/3"><img class="" src="{% static 'images/no_data_playlist.png' %}" alt="No Data"></div>
+                </div>
+            {% endif %}`;
+  }
+  if (isPengguna) {
+    document.getElementById("playlist").innerHTML = `
+            <h2 class="text-3xl font-bold pb-3">Playlists</h2>
+            {% if playlists %}
+                <div class="grid grid-cols-4 gap-9">
+                {% for playlist in playlists %}
+                  <a href="" class="group relative rounded-lg overflow-hidden shadow-lg hover:bg-orange-500">
+                      <div class="transition transform translate-y-8 ease-in absolute inset-0 flex justify-end items-center group-hover:translate-y-5 invisible group-hover:visible pt-4 pr-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 bg-orange-500 text-white p-3 rounded-full">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+                          </svg>
+                      </div>
+                      <img class="w-full" src="{% static 'images/defaultPlaylist.png' %}">
+                      <div class="px-6 py-4">
+                          <div class="font-semibold text-xl mb-2 group-hover:text-white">{{ playlist }}</div>
+                      </div>
+                  </a>
+                {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center text-4xl justify-center">
+                <div><p class="font-semibold">Belum Memiliki Playlist.</p></div>
+                <div class="mx-auto w-1/3"><img class="" src="{% static 'images/no_data_playlist.png' %}" alt="No Data"></div>
+                </div>
+            {% endif %}`;
+  }
+</script>
+
+{% endblock content %}

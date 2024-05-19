@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block framework %}
+  <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block meta %}
+<title>Register</title>
+{% endblock meta %}
+
+{% block content %}
+
+<body>
+    <div class="container px-20 py-24 mx-auto">
+        <div class="text-left mb-7">
+            <h1 class="text-4xl md:text-5xl text-700 font-semibold">Register</h1>
+        </div>
+        <div class="flex flex-wrap -m-4">
+            <div class="p-4 sm:w-1/2 lg:w-1/2">
+                <a href="/register/user" class="no-underline">
+                    <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+                        <img class="lg:h-72 md:h-48 w-full object-cover object-center"
+                            src="{% static 'images/penggunaRegis.jpg' %}" alt="Pengguna">
+                        <div class="p-6 hover:bg-orange-500 hover:text-white transition duration-300 ease-in">
+                            <h1 class="text-4xl font-semibold mb-3">Pengguna</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="p-4 sm:w-1/2 lg:w-1/2">
+                <a href="/register/label" class="no-underline">
+                    <div class="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
+                        <img class="lg:h-72 md:h-48 w-full object-cover object-center"
+                            src="{% static 'images/labelRegis.jpg' %}" alt="Pengguna">
+                        <div class="p-6 hover:bg-orange-500 hover:text-white transition duration-300 ease-in">
+                            <h1 class="text-4xl font-semibold mb-3">Label</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% include 'footer.html' %}
+
+<script>
+
+</script>
+
+{% endblock content %}

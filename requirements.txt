@@ -1,6 +1,9 @@
 django
+django-taggit
+django-social-share
 gunicorn
 whitenoise
 psycopg2-binary
 requests
 urllib3
+Pillow

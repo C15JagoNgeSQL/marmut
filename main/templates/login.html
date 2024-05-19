@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block framework %}
+  <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block meta %}
+    <title>Login</title>
+{% endblock meta %}
+
+{% block content %}
+
+<div class="flex items-center justify-center min-h-screen bg-black">
+    <div class="bg-white rounded-lg shadow-lg p-8 max-w-sm w-full">
+        <h1 class="text-2xl font-bold mb-4">Login</h1>
+
+        <form method="POST" action="" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <input type="text" name="email" placeholder="Email" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+                <input type="password" name="password" placeholder="Password" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+                <button type="submit" class="w-full bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600">Login</button>
+            </div>
+        </form>
+
+        {% if messages %}
+            <ul class="mt-4">
+                {% for message in messages %}
+                    <li class="text-red-500">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <p class="text-center mt-4 text-gray-600">Don't have an account yet? <a href="{% url 'main:register' %}" class="text-indigo-500 hover:underline">Register Now</a></p>
+    </div>
+</div>
+
+{% endblock content %}
