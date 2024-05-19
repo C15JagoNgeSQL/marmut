@@ -302,6 +302,8 @@ def hitung_total_play(song_id):
             """, [song_id])
         jumlah_play = cursor.fetchone()
 
+        cursor.execute("set search_path to public;")
+
         return jumlah_play
     
 def hitung_total_download(song_id):
