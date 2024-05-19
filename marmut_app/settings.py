@@ -74,29 +74,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'marmut_app.wsgi.application'
 
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-    'access-control-allow-origin',
-]
-
 CSRF_TRUSTED_ORIGINS = ['https://marmut-app-c15.up.railway.app/']
-
-# Batasi asal yang diizinkan
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SAMESITE = 'None'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
