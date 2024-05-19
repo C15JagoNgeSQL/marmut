@@ -42,6 +42,34 @@ def get_pemilik_hak_cipta_songwriter(email):
         cursor.execute("set search_path to public;")
         return result[0]
 
+def get_pemilik_hak_cipta_label(email):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute(""" 
+        SELECT id_pemilik_hak_cipta
+        FROM LABEL
+        WHERE email = %s;
+        """, (email,))
+
+        result = cursor.fetchone()
+        cursor.execute("set search_path to public;")
+        return result[0]
+
+def get_rate_royalti(id):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute(""" 
+        SELECT rate_royalti
+        FROM pemilik_hak_cipta
+        WHERE id = %s;
+        """, (id,))
+
+        result = cursor.fetchone()
+        cursor.execute("set search_path to public;")
+        return result[0]
+
 def get_label_data(email):
     with conn.cursor() as cursor:
         cursor.execute("set search_path to marmut;")
