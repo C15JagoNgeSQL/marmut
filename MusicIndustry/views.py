@@ -4,6 +4,7 @@ from django.urls import reverse
 import uuid
 from datetime import datetime
 from MusicIndustry.query import *
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -145,6 +146,7 @@ def daftar_lagu(request, album_id):
     }
     return render(request, "daftar_lagu.html", context)
 
+@csrf_exempt
 def create_album(request):
     labels = get_labels()
     pilihan_label = []
@@ -233,6 +235,7 @@ def create_album(request):
 
     return render(request, "create_album.html", context)
 
+@csrf_exempt
 def create_lagu(request, album_id):
 
     artists = get_artists()
@@ -309,6 +312,7 @@ def create_lagu(request, album_id):
 
     return render(request, "create_lagu.html", context)
 
+@csrf_exempt
 def delete_lagu(request, lagu_id):
     if request.method == 'POST':
         print(f"akan didelete lagu", lagu_id)
@@ -319,6 +323,7 @@ def delete_lagu(request, lagu_id):
         previous_url = request.META.get('HTTP_REFERER', '/')
         return HttpResponseRedirect(previous_url)
 
+@csrf_exempt
 def delete_album(request, album_id):
     if request.method == 'POST':
         print(f"akan didelete album", album_id)
