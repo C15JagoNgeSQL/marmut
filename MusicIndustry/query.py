@@ -381,6 +381,17 @@ def delete_album_query(id_album):
         cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
+        DELETE FROM konten
+        WHERE id IN (
+        SELECT konten.id
+        FROM konten
+        JOIN song ON konten.id = song.id_konten
+        JOIN album ON song.id_album = album.id
+        WHERE album.id = %s
+        );
+        """, (id_album,))
+        
+        cursor.execute(""" 
         delete from album
         where album.id = %s;
         """, (id_album,))
