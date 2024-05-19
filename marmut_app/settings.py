@@ -74,7 +74,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'marmut_app.wsgi.application'
 
-CSRF_TRUSTED_ORIGINS = ['https://marmut-app-c15.up.railway.app/']
+# CSRF_TRUSTED_ORIGINS = ['https://marmut-app-c15.up.railway.app/']
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
