@@ -388,29 +388,121 @@ def delete_episode_view(request):
     # Redirect ke halaman detail podcast atau halaman lain yang sesuai
     return HttpResponse("Success!")
 
+@csrf_exempt
+def delete_podcast_view(request):
+    podcast_id = json.loads(request.body)['id_podcast']
+
+    # Mengambil email dari sesi
+    if 'email' not in request.session:
+        return HttpResponseRedirect(reverse("main:login"))
+
+    email_podcaster = request.session.get('email')
+
+    with connections['default'].cursor() as cursor:
+        # Mengatur schema database
+        cursor.execute("SET search_path TO marmut;")
+
+        # Periksa apakah podcast dimiliki oleh podcaster
+        cursor.execute("""
+            SELECT EXISTS (
+                SELECT 1
+                FROM PODCAST p
+                WHERE p.email_podcaster = %s AND p.id_konten = %s
+            );
+        """, [email_podcaster, podcast_id])
+        podcast_exists = cursor.fetchone()[0]
+
+        if podcast_exists:
+            # Hapus podcast dari database
+            cursor.execute("""
+                DELETE FROM PODCAST
+                WHERE id_konten = %s;
+            """, [podcast_id])
+
+    # Redirect ke halaman detail podcast atau halaman lain yang sesuai
+    return HttpResponse("Success!")
+
 import uuid
 
 @csrf_exempt
-def create_episode(request, id_konten_podcast):
-    print("tes")
+def create_episode(request):
     if request.method == 'POST':
-        print("masuk")
-        data = json.loads(request.body)
-        id_episode = uuid.uuid4()
-        judul = data.get('judul')
-        deskripsi = data.get('deskripsi')
-        durasi = data.get('durasi')
-        tanggal_rilis = data.get('tanggal_rilis')
+        try:
+            data = json.loads(request.body)
+            podcast_data = data.get('uuid')
+            id_episode = uuid.uuid4()
+            judul = data.get('judul')
+            deskripsi = data.get('deskripsi')
+            durasi = data.get('durasi')
+            tanggal_rilis = datetime.now()  # Ubah ini sesuai dengan kebutuhan Anda, contohnya bisa menggunakan timezone.now()
 
-        with connections['default'].cursor() as cursor:
-            cursor.execute("SET search_path TO marmut;")
-            cursor.execute("""
-                INSERT INTO EPISODE (id_episode, id_konten_podcast, judul, deskripsi, durasi, tanggal_rilis)
-                VALUES (%s, %s, %s, %s, %s)
-            """, [id_episode, id_konten_podcast, judul, deskripsi, durasi, tanggal_rilis])
+            with connections['default'].cursor() as cursor:
+                cursor.execute("SET search_path TO marmut;")
+                cursor.execute("""
+                    INSERT INTO EPISODE (id_episode, id_konten_podcast, judul, deskripsi, durasi, tanggal_rilis)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """, [id_episode, podcast_data, judul, deskripsi, durasi, tanggal_rilis])
 
-        return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'failed'}, status=400)
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            return JsonResponse({'status': 'failed', 'error': str(e)}, status=500)
+
+    elif request.method == 'OPTIONS':
+        # Tanggapi preflight requests dalam CORS
+        return JsonResponse({'status': 'options'}, status=200)
+
+    return JsonResponse({'status': 'failed', 'error': 'Method not allowed'}, status=405)
 
 
 
+@csrf_exempt
+def create_podcast(request):
+    if request.method == 'POST':
+        judul = request.POST.get('judul')
+        genre = request.POST.get('genre')
+
+        # Mengambil email dari sesi
+        if 'email' not in request.session:
+            return HttpResponseRedirect(reverse("main:login"))
+
+        email_podcaster = request.session.get('email')
+        id_konten = uuid.uuid4()
+        tanggal_rilis = datetime.now()
+        tahun = tanggal_rilis.year
+        durasi = 0
+
+        try:
+            with connection.cursor() as cursor:
+                
+                cursor.execute("SET search_path TO marmut;")
+                
+                # Insert ke tabel KONTEN
+                print(f"Inserting into KONTEN: id={id_konten}, judul={judul}, tanggal_rilis={tanggal_rilis}, durasi={durasi}, tahun={tahun}")
+                cursor.execute(
+                    "INSERT INTO KONTEN VALUES (%s, %s, %s, %s, %s)",
+                    [id_konten, judul, tanggal_rilis, tahun, durasi]
+                )
+
+                # Insert ke tabel PODCAST
+                print(f"Inserting into PODCAST: id_konten={id_konten}, email_podcaster={email_podcaster}")
+                cursor.execute(
+                    "INSERT INTO PODCAST (id_konten, email_podcaster) VALUES (%s, %s)",
+                    [id_konten, email_podcaster]
+                )
+
+                # Insert ke tabel GENRE
+                print(f"Inserting into GENRE: id_konten={id_konten}, genre={genre}")
+                cursor.execute(
+                    "INSERT INTO GENRE (id_konten, genre) VALUES (%s, %s)",
+                    [id_konten, genre]
+                )
+
+            return JsonResponse({
+                'judul': judul,
+                'genre': genre
+            })
+        except Exception as e:
+            print(f"Error: {str(e)}")
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)

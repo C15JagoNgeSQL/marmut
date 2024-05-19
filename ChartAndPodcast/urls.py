@@ -15,5 +15,7 @@ urlpatterns = [
     path('list_podcast/', list_podcast_view, name='list_podcast'),    
     path('r_podcast/<str:podcast_id>/', r_podcast_view, name='r_podcast'),
     path('delete_episode', delete_episode_view, name='delete_episode'),
-    path('create_episode', create_episode, name='create_episode')
+    path('create_episode/<uuid:uuid>', create_episode, name='create_episode'),
+    path('delete_podcast', delete_podcast_view, name='delete_podcast'),
+    path('create_podcast', create_podcast, name='create_podcast'),
 ]
