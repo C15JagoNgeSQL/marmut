@@ -6,7 +6,8 @@ def get_songs_artist(email):
         cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
-        select konten.judul from konten, song, artist
+        select konten.judul, konten.id
+        from konten, song, artist
         where konten.id = song.id_konten and artist.id = song.id_artist and artist.email_akun = %s;
         """, (email,))
 
@@ -19,7 +20,7 @@ def get_songs_songwriter(email):
         cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
-        select konten.judul 
+        select konten.judul, konten.id 
         from konten, songwriter, songwriter_write_song
         where konten.id = songwriter_write_song.id_song and songwriter.id = songwriter_write_song.id_songwriter and songwriter.email_akun = %s;
         """, (email,))
@@ -33,7 +34,7 @@ def get_podcasts(email):
         cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
-        select konten.judul
+        select konten.judul, konten.id
         from konten, podcast
         where konten.id = podcast.id_konten and email_podcaster = %s;
         """, (email,))
@@ -47,7 +48,7 @@ def get_playlist(email):
         cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
-        select judul
+        select judul, id_user_playlist
         from user_playlist
         where email_pembuat = %s;
         """, (email,))
@@ -61,7 +62,7 @@ def get_album(email):
         cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
-        select album.judul
+        select album.judul, album.id
         from album, label
         where album.id_label = label.id and email = %s;
         """, (email,))

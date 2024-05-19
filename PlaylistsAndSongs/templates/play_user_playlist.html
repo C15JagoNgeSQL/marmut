@@ -23,7 +23,7 @@
                     <img src="https://hypeddit-gates-prod.s3.amazonaws.com/vc9gco_coverartmanual" alt="Gambar playlist" class="w-full h-auto">
                 </div>
                 <div class="p-4 pt-0 w-full">
-                    <a href="{% url 'PlaylistAndSongs:shuffle_play_playlist' detail.id_user_playlist %}"><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Shuffle Play</button></a>
+                    <a href="{% url 'PlaylistsAndSongs:shuffle_play_playlist' detail.id_user_playlist %}"><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Shuffle Play</button></a>
                     <a href=""><button class="w-full bg-orange-500 text-center text-white p-3 rounded-lg">Kembali</button></a>  
                 </div>  
             </div>
@@ -61,8 +61,8 @@
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-left">{{ song.nama_artist }}</td>
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-left">{{ song.durasi }} menit</td>
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-left">
-                        <a href="{% url 'PlaylistAndSongs:detail_lagu' song.id_song %}"><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Lihat</span></a>
-                        <a href="{% url 'PlaylistAndSongs:play_song' song.id_song detail.id_user_playlist %}"><span class="p-1.5 ml-1 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">Play</span></a>
+                        <a href="{% url 'PlaylistsAndSongs:detail_lagu' song.id_song %}"><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Lihat</span></a>
+                        <a href="{% url 'PlaylistsAndSongs:play_song' song.id_song detail.id_user_playlist %}"><span class="p-1.5 ml-1 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">Play</span></a>
                     </td>
                 </tr>
                 {% endfor %}

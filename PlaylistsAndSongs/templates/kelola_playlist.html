@@ -35,9 +35,9 @@
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-left">{{ playlist.jumlah_lagu }}</td>
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-left">{{ playlist.total_durasi }} menit</td>
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap text-left">
-                        <a href="{% url 'PlaylistAndSongs:detail_playlist' playlist.id %}"><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Detail</span></a>
-                        <a href="{% url 'PlaylistAndSongs:ubah_playlist' playlist.id %}"><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">Ubah</span></a>
-                        <a href="{% url 'PlaylistAndSongs:hapus_playlist' playlist.id %}"><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50">Hapus</span></a>
+                        <a href="{% url 'PlaylistsAndSongs:detail_playlist' playlist.id %}"><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-green-800 bg-green-200 rounded-lg bg-opacity-50">Detail</span></a>
+                        <a href="{% url 'PlaylistsAndSongs:ubah_playlist' playlist.id %}"><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-yellow-800 bg-yellow-200 rounded-lg bg-opacity-50">Ubah</span></a>
+                        <a href="{% url 'PlaylistsAndSongs:hapus_playlist' playlist.id %}"><span class="p-1.5 text-xs font-medium uppercase tracking-wider text-red-800 bg-red-200 rounded-lg bg-opacity-50">Hapus</span></a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -49,7 +49,7 @@
             
         </div>
         <div class="mt-8 text-center ">
-            <a href="{% url 'PlaylistAndSongs:tambah_playlist' %}"><button class="w-20% bg-orange-500 py-3 text-center text-white p-3 rounded-lg" style="bottom: 20px;">Tambah Playlist</button></a>
+            <a href="{% url 'PlaylistsAndSongs:tambah_playlist' %}"><button class="w-20% bg-orange-500 py-3 text-center text-white p-3 rounded-lg" style="bottom: 20px;">Tambah Playlist</button></a>
         </div>
     </div>
 </body>

@@ -76,17 +76,18 @@ def show_dashboard(request):
         tempat_tanggal_lahir = f"{tempat_lahir}, {tanggal_lahir_formatted}"
 
         if (get_playlist is not None):
-            playlists = [playlist[0] for playlist in get_playlist(email)]
+            playlists = [playlist for playlist in get_playlist(email)]
+            print(playlists)
 
         songs = []
         if (request.session.get('isArtist')):
-            songs += [song[0] for song in get_songs_artist(email)]
+            songs += [song for song in get_songs_artist(email)]
         if (request.session.get('isSongwriter')):
-            songs += [song[0] for song in get_songs_songwriter(email)]
+            songs += [song for song in get_songs_songwriter(email)]
         
         podcasts = []
         if (request.session.get('isPodcaster')):
-            podcasts += [podcast[0] for podcast in get_podcasts(email)]
+            podcasts += [podcast for podcast in get_podcasts(email)]
 
         context = {
             'nama': nama,
@@ -112,7 +113,7 @@ def show_dashboard(request):
         nama = result[1]
         kontak = result[4]
         
-        albums = [album[0] for album in get_album(email)]
+        albums = [album for album in get_album(email)]
     
         context = {
             'nama': nama,
