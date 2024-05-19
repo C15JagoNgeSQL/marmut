@@ -3,33 +3,87 @@
 {% load static %}
 {% block framework %}
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    function deletePodcast(id_konten) {
+      const url = "{% url 'ChartAndPodcast:delete_podcast' %}";
+      fetch(url, {
+        method: 'DELETE',
+        body: JSON.stringify({
+          id_podcast: id_konten
+        }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            alert('Podcast berhasil dihapus');
+            window.location.reload();
+          } else {
+            alert('Gagal menghapus podcast');
+          }
+        });
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("createPodcastForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const judul = document.getElementById('judul').value;
+            const genre = document.getElementById('genre').value;
+
+            fetch("{% url 'ChartAndPodcast:create_podcast' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: new URLSearchParams({
+                    'judul': judul,
+                    'genre': genre
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error:', data.error);
+                } else {
+                    const resultDiv = document.getElementById('result');
+                    resultDiv.innerHTML = `
+                        <h3>Podcast Created:</h3>
+                        <p>Judul: ${data.judul}</p>
+                        <p>Genre: ${data.genre}</p>
+                    `;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
+
+</script>
 {% endblock %}
+
 
 {% block content %}
 <div class="flex flex-col md:flex-row md:space-x-4 mt-20">
-  <!-- Create Podcast Form -->
-  <div class="w-full md:w-1/3 p-4 pt-6 pb-8 mb-4 bg-orange-400 rounded shadow-md">
-    <h2 class="text-2xl font-bold mb-4 text-white">Create Podcast</h2>
-    <form>
-      <label class="block mb-2">
-        <span class="text-white">Judul</span>
-        <input type="text" class="w-full px-4 py-2 text-white border border-gray-300 rounded" />
-      </label>
-      <label class="block mb-2">
-        <span class="text-white">Genre</span>
-        <select multiple class="w-full px-4 py-2 text-white border border-gray-300 rounded">
-          <option value="Comedy">Comedy</option>
-          <option value="Drama">Drama</option>
-          <option value="Education">Education</option>
-          <!-- Add more options here -->
-        </select>
-      </label>
-      <label class="block mb-2">
-        <span class="text-white">Durasi</span>
-        <input type="text" class="w-full px-4 py-2 text-white border border-gray-300 rounded" />
-      </label>
-      <button class="bg-amber-500 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded">Submit</button>
-    </form>
+
+    <!-- Create Podcast Form -->
+    <div class="w-full md:w-1/3 p-4 pt-6 pb-8 mb-4 bg-orange-400 rounded shadow-md">
+      <h2 class="text-2xl font-bold mb-4 text-white">Create Podcast</h2>
+      <form id="createPodcastForm">
+        {% csrf_token %}
+        <label class="block mb-2">
+          <span class="text-white">Judul</span>
+          <input type="text" id="judul" name="judul" class="w-full px-4 py-2 text-white border border-gray-300 rounded" required />
+        </label>
+        <label class="block mb-2">
+          <span class="text-white">Genre</span>
+          <select id="genre" name="genre" multiple class="w-full px-4 py-2 text-white border border-gray-300 rounded" required>
+            <option value="Comedy">Comedy</option>
+            <option value="Drama">Drama</option>
+            <option value="Education">Education</option>
+            <!-- Add more options here -->
+          </select>
+        </label>
+        <button type="submit" class="bg-amber-500 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+      </form>
+    </div>
   </div>
 
   <!-- List Podcast -->
@@ -46,98 +100,21 @@
           </tr>
         </thead>
         <tbody>
+          {% for podcast in podcasts %}
           <tr class="border-b">
-            <td class="px-4 py-2 text-black">Podcast1</td>
-            <td class="px-4 py-2 text-black">0</td>
-            <td class="px-4 py-2 text-black">0 menit</td>
+            <td class="px-4 py-2 text-black">{{ podcast.judul }}</td>
+            <td class="px-4 py-2 text-black">{{ podcast.jumlah_episode }}</td>
+            <td class="px-4 py-2 text-black">{{ podcast.total_durasi }}</td>
             <td class="px-4 py-2 text-black">
-              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Lihat Daftar Episode</button>
+              <a href="{% url 'ChartAndPodcast:crud_episode' podcast_data=podcast.id_konten %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Lihat Daftar Episode</a>
               <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Tambah Episode</button>
-              <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hapus</button>
+              <button onclick="deletePodcast('{{ podcast.id_konten }}')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hapus</button>
             </td>
           </tr>
-          <tr class="border-b">
-            <td class="px-4 py-2 text-black">Podcast2</td>
-            <td class="px-4 py-2 text-black">2</td>
-            <td class="px-4 py-2 text-black">4 menit</td>
-            <td class="px-4 py-2 text-black">
-              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Lihat Daftar Episode</button>
-              <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Tambah Episode</button>
-              <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hapus</button>
-            </td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </section>
-  </div>
-</div>
-
-<div class="flex flex-col md:flex-row md:space-x-4">
-  <!-- Create Episode Form -->
-  <div class="w-full md:w-1/3 p-4 pt-6 pb-8 mb-4 bg-orange-400 rounded shadow-md">
-    <h2 class="text-2xl font-bold mb-4 text-white">Create Episode</h2>
-    
-    <form>
-      <label class="block mb-2">
-        <span class="text-white">Podcast</span>
-        <select class="w-full px-4 py-2 text-white border border-gray-300 rounded">
-          <option value="Podcast1">Podcast1</option>
-          <option value="Podcast2">Podcast2</option>
-          <!-- Add more options here -->
-        </select>
-      </label>
-      <label class="block mb-2">
-        <span class="text-white">Judul</span>
-        <input type="text" class="w-full px-4 py-2 text-white border border-gray-300 rounded" />
-      </label>
-      <label class="block mb-2">
-        <span class="text-white">Deskripsi</span>
-        <textarea class="w-full px-4 py-2 text-white border border-gray-300 rounded"></textarea>
-      </label>
-      <label class="block mb-2">
-        <span class="text-white">Durasi</span>
-        <input type="text" class="w-full px-4 py-2 text-white border border-gray-300 rounded" />
-      </label>
-      <button class="bg-amber-500 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded">Submit</button>
-    </form>
-  </div>
-
-  <!-- List Episodes -->
-  <div class="w-full md:w-2/3 p-4 pt-6 pb-8 mb-4 bg-orange-400 rounded shadow-md">
-    <h2 class="text-2xl font-bold mb-4 text-black">Daftar Episode Podcast1</h2>
-    <section class="bg-white p-4 rounded shadow">
-      <table class="w-full border-collapse">
-        <thead>
-          <tr>
-            <th class="px-4 py-2 text-black">Judul Episode</th>
-            <th class="px-4 py-2 text-black">Deskripsi</th>
-            <th class="px-4 py-2 text-black">Durasi</th>
-            <th class="px-4 py-2 text-black">Tanggal</th>
-            <th class="px-4 py-2 text-black">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b">
-            <td class="px-4 py-2 text-black">SubJudul1</td>
-            <td class="px-4 py-2 text-black">Lorem Ipsum</td>
-            <td class="px-4 py-2 text-black">59 menit</td>
-            <td class="px-4 py-2 text-black">18/03/2024</td>
-            <td class="px-4 py-2 text-black">
-              <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hapus</button>
-            </td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-4 py-2 text-black">SubJudul2</td>
-            <td class="px-4 py-2 text-black">Lorem Ipsum</td>
-            <td class="px-4 py-2 text-black">1 jam 2 menit</td>
-            <td class="px-4 py-2 text-black">25/03/2024</td>
-            <td class="px-4 py-2 text-black">
-              <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hapus</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </section>  
   </div>
 </div>
 

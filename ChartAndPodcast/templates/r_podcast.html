@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+
 
 {% load static %}
 {% block framework %}
@@ -11,12 +11,7 @@
         <h1 class="text-4xl font-bold text-center text-white mb-4">PODCAST DETAIL</h1>
         <div class="mb-4 text-white">
             <p class="text-xl font-bold">Judul: {{ podcast_data.judul }}</p>
-            <p class="text-lg">Genre(s):</p>
-            <ul class="list-disc ml-6">
-                {% for genre in podcast_data.genres %}
-                <li>{{ genre }}</li>
-                {% endfor %}
-            </ul>
+            <p class="text-lg">Genre(s): {{ podcast_data.genre}}</p>
             <p class="text-lg">Podcaster: {{ podcast_data.podcaster }}</p>
             <p class="text-lg">Total Durasi: {{ podcast_data.durasi }}</p>
             <p class="text-lg">Tanggal Rilis: {{ podcast_data.tanggal_rilis }}</p>
