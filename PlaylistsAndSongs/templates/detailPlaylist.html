@@ -23,7 +23,7 @@
                     <img src="https://hypeddit-gates-prod.s3.amazonaws.com/vc9gco_coverartmanual" alt="Gambar playlist" class="w-full h-auto">
                 </div>
                 <div class="p-4 pt-0 w-full">
-                    <a href="{% url 'PlaylistsAndSongs:detail_playlist' detail.id_user_playlist %}"><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Shuffle Play</button></a>
+                    <a href="{% url 'PlaylistsAndSongs:shuffle_play_playlist_detail' detail.id_user_playlist %}"><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Shuffle Play</button></a>
                     <a href="{% url 'PlaylistsAndSongs:kelola_playlist' %}"><button class="w-full bg-orange-500 text-center text-white p-3 rounded-lg">Kembali</button></a>  
                 </div>  
             </div>

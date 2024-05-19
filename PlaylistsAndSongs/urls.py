@@ -16,6 +16,7 @@ urlpatterns = [
     path('tambah-lagu-ke-playlist/<str:id_song>', show_tambah_lagu_ke_playlist, name='tambah_lagu_ke_playlist'),
     path('slider_play/<str:id_song>', slider_play, name='slider_play'),
     path('shuffle-play-playlist/<str:playlist_id>', shuffle_play_playlist, name='shuffle_play_playlist'),
+    path('shuffle-play-playlist-detail/<str:playlist_id>', shuffle_play_playlist_detail, name='shuffle_play_playlist_detail'),
     path('play-song/<str:id_song>/<str:playlist_id>', play_song, name='play_song'),
     path('play-song-from-own-playlist/<str:id_song>/<str:playlist_id>', play_song_from_own_playlist, name='play_song_from_own_playlist'),
 ]

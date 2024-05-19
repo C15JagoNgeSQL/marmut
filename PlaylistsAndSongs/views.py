@@ -31,7 +31,7 @@ def show_tambah_playlist(request):
         id_playlist = uuid.uuid4()
 
         tambah_playlist(email_pembuat, id_user_playlist, judul, deskripsi, tanggal_dibuat, id_playlist)
-        return HttpResponseRedirect(reverse("PlaylistAndSongs:kelola_playlist"))
+        return HttpResponseRedirect(reverse("PlaylistsAndSongs:kelola_playlist"))
 
     return render(request, "tambahPlaylist.html")
 
@@ -49,7 +49,7 @@ def show_ubah_playlist(request, user_playlist_id):
         deskripsi = request.POST.get('deskripsi')
 
         edit_playlist(judul, deskripsi, user_playlist_id)
-        return HttpResponseRedirect(reverse("PlaylistAndSongs:kelola_playlist"))
+        return HttpResponseRedirect(reverse("PlaylistsAndSongs:kelola_playlist"))
 
     return render(request, "ubahPlaylist.html", {'playlist': playlist})
 
@@ -57,7 +57,7 @@ def show_hapus_playlist(request, id_user_playlist):
     id_playlist = get_user_playlist_from_user_playlist_id(id_user_playlist)[6]
 
     delete_user_playlist(id_user_playlist, id_playlist)
-    return HttpResponseRedirect(reverse("PlaylistAndSongs:kelola_playlist"))
+    return HttpResponseRedirect(reverse("PlaylistsAndSongs:kelola_playlist"))
 
 def show_detail_playlist(request, id_user_playlist):
     detail_playlist = get_user_playlist_from_user_playlist_id(id_user_playlist)
@@ -109,13 +109,13 @@ def show_tambah_lagu(request, playlist_id):
             return render(request, "tambah_lagu.html", {'error_message': 'Lagu sudah terdapat dalam playlist!', 'songs': songs})
         else:
             tambah_lagu_ke_playlist(playlist_id, id_song, rows)
-            return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_playlist", kwargs={'id_user_playlist': rows[1]}))
+            return HttpResponseRedirect(reverse("PlaylistsAndSongs:detail_playlist", kwargs={'id_user_playlist': rows[1]}))
             
     return render(request, "tambah_lagu.html", {'songs': songs})    
 
 def show_hapus_lagu(request, playlist_id, id_song):
     rows = delete_lagu_dari_playlist(playlist_id, id_song)
-    return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_playlist", kwargs={'id_user_playlist': rows[1]}))
+    return HttpResponseRedirect(reverse("PlaylistsAndSongs:detail_playlist", kwargs={'id_user_playlist': rows[1]}))
 
 @csrf_exempt
 def show_detail_lagu(request, song_id):
@@ -171,10 +171,10 @@ def download_lagu(request, id_song):
     song_detail = get_song_detail(id_song)[0]
 
     if check_downloaded_song(id_song):
-        return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_lagu", kwargs={'song_id': id_song}))
+        return HttpResponseRedirect(reverse("PlaylistsAndSongs:detail_lagu", kwargs={'song_id': id_song}))
     else:
         premium_download_song(id_song, email)
-        return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_lagu", kwargs={'song_id': id_song}))
+        return HttpResponseRedirect(reverse("PlaylistsAndSongs:detail_lagu", kwargs={'song_id': id_song}))
     
 @csrf_exempt
 def slider_play(request, id_song):
@@ -186,7 +186,7 @@ def slider_play(request, id_song):
             current_time = timezone.now()
             akun_play_song(email, id_song, current_time)
         
-        return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_lagu", kwargs={'song_id': id_song}))
+        return HttpResponseRedirect(reverse("PlaylistsAndSongs:detail_lagu", kwargs={'song_id': id_song}))
             
 @csrf_exempt
 def show_tambah_lagu_ke_playlist(request, id_song):
@@ -269,7 +269,21 @@ def shuffle_play_playlist(request, playlist_id):
     for song in songs:
         akun_play_song(email, song[3], current_time)
 
-    return HttpResponseRedirect(reverse("PlaylistAndSongs:play_user_playlist", kwargs={'playlist_id': playlist_id}))
+    return HttpResponseRedirect(reverse("PlaylistsAndSongs:play_user_playlist", kwargs={'playlist_id': playlist_id}))
+
+def shuffle_play_playlist_detail(request, playlist_id):
+    email = request.session.get('email')
+
+    user_playlist_data = get_user_playlist_from_user_playlist_id(playlist_id)
+    songs = get_song_data(playlist_id)
+    current_time = timezone.now()
+
+    akun_play_playlist(email, playlist_id, user_playlist_data, current_time)
+
+    for song in songs:
+        akun_play_song(email, song[3], current_time)
+
+    return HttpResponseRedirect(reverse("PlaylistsAndSongs:detail_playlist", kwargs={'id_user_playlist': playlist_id}))
 
 def play_song(request, id_song, playlist_id):
     email = request.session.get('email')
@@ -277,7 +291,7 @@ def play_song(request, id_song, playlist_id):
 
     akun_play_song(email, id_song, current_time)
     
-    return HttpResponseRedirect(reverse("PlaylistAndSongs:play_user_playlist", kwargs={'playlist_id': playlist_id}))
+    return HttpResponseRedirect(reverse("PlaylistsAndSongs:play_user_playlist", kwargs={'playlist_id': playlist_id}))
 
 def play_song_from_own_playlist(request, id_song, playlist_id):
     email = request.session.get('email')
@@ -285,6 +299,6 @@ def play_song_from_own_playlist(request, id_song, playlist_id):
 
     akun_play_song(email, id_song, current_time)
     
-    return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_playlist", kwargs={'id_user_playlist': playlist_id}))
+    return HttpResponseRedirect(reverse("PlaylistsAndSongs:detail_playlist", kwargs={'id_user_playlist': playlist_id}))
 
 
