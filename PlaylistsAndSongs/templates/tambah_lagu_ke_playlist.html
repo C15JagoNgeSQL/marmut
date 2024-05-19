@@ -20,8 +20,8 @@
                 <div class="bg-red-500 text-white p-3 rounded mb-4">
                     Lagu dengan judul {{song.judul}} sudah ditambahkan di {{ gagal }}!
                     <div class="flex pt-3">
-                      <a class="underline" href="{% url 'PlaylistAndSongs:detail_playlist' id_user_playlist %}"><h2>Ke Playlist</h2></a>
-                      <a class="underline pl-3" href="{% url 'PlaylistAndSongs:detail_lagu' song.id %}"><h2>Kembali</h2></a>
+                      <a class="underline" href="{% url 'PlaylistsAndSongs:detail_playlist' id_user_playlist %}"><h2>Ke Playlist</h2></a>
+                      <a class="underline pl-3" href="{% url 'PlaylistsAndSongs:detail_lagu' song.id %}"><h2>Kembali</h2></a>
                     </div>
                 </div>
                 {% endif %}
@@ -29,8 +29,8 @@
                 <div class="bg-green-500 text-white p-3 rounded mb-4">
                     Berhasil menambahkan Lagu dengan judul {{song.judul}} ke {{ berhasil }}!
                     <div class="flex pt-3">
-                      <a class="underline" href="{% url 'PlaylistAndSongs:detail_playlist' id_user_playlist %}"><h2>Ke Playlist</h2></a>
-                      <a class="underline pl-3" href="{% url 'PlaylistAndSongs:detail_lagu' song.id %}"><h2>Kembali</h2></a>
+                      <a class="underline" href="{% url 'PlaylistsAndSongs:detail_playlist' id_user_playlist %}"><h2>Ke Playlist</h2></a>
+                      <a class="underline pl-3" href="{% url 'PlaylistsAndSongs:detail_lagu' song.id %}"><h2>Kembali</h2></a>
                     </div>
                 </div>
                 {% endif %}
@@ -52,7 +52,7 @@
                     </div>
                 </form>
                 <div class="mt-5">
-                  <a href="{% url 'PlaylistAndSongs:detail_lagu' song.id %}"><button id="submitButton" class="w-full bg-gray-500 py-3 text-center text-white">Kembali</button></a>
+                  <a href="{% url 'PlaylistsAndSongs:detail_lagu' song.id %}"><button id="submitButton" class="w-full bg-gray-500 py-3 text-center text-white">Kembali</button></a>
                 </div>
             </div>
         </div>
