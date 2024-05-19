@@ -90,11 +90,7 @@ CORS_ALLOW_HEADERS = [
 CSRF_TRUSTED_ORIGINS = ['https://marmut-app-c15.up.railway.app/']
 
 # Batasi asal yang diizinkan
-CORS_ALLOWED_ORIGINS = [
-    'https://marmut-app-c15.up.railway.app',
-    # Tambahkan domain lain jika diperlukan
-]
-
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
