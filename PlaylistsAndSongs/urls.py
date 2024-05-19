@@ -1,7 +1,7 @@
 from django.urls import path
 from PlaylistsAndSongs.views import *
 
-app_name = 'PlaylistAndSongs'
+app_name = 'PlaylistsAndSongs'
 
 urlpatterns = [
     path('kelola-playlist/', show_kelola_user_playlist, name='kelola_playlist'),

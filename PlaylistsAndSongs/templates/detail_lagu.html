@@ -93,7 +93,7 @@
                         <input type="range" id="progressSlider" min="0" max="100" value="0" step="1" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mb-5"/>
                         <button type="submit" class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Play</button>
                     </form>
-                    <a href="{% url 'PlaylistAndSongs:tambah_lagu_ke_playlist' detail.id_song %}"><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Add to Playlist</button></a>
+                    <a href="{% url 'PlaylistsAndSongs:tambah_lagu_ke_playlist' detail.id_song %}"><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Add to Playlist</button></a>
                     {% if premium %}
                     <form method="POST">
                         <input type="hidden" name="id_song" value="{{ detail.id_song }}">
@@ -188,7 +188,7 @@
 
         var form = document.createElement("form");
         form.method = "POST";
-        form.action = "{% url 'PlaylistAndSongs:slider_play' detail.id_song %}";
+        form.action = "{% url 'PlaylistsAndSongs:slider_play' detail.id_song %}";
 
         var sliderInput = document.createElement("input");
         sliderInput.type = "hidden";
