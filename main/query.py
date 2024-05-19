@@ -1,4 +1,5 @@
 from django.db import connection as conn
+import uuid
 
 def get_songs_artist(email):
     with conn.cursor() as cursor:
@@ -227,3 +228,95 @@ def cek_nonpremium(email):
         result = cursor.fetchone()
         cursor.execute("set search_path to public;")
         return result is not None
+    
+def cek_existing_email(email):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute("SELECT email FROM AKUN WHERE email = %s", [email])
+        existing_email_in_user = cursor.fetchone()
+
+        cursor.execute("SELECT email FROM LABEL WHERE email = %s", [email])
+        existing_email_in_label = cursor.fetchone()
+
+        cursor.execute("set search_path to public;")
+
+        if existing_email_in_user or existing_email_in_label:
+            return True
+        else:
+            return False
+    
+def register_user(email, password, nama, gender, tempat_lahir, tanggal_lahir, is_verified, kota_asal):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute("""
+            INSERT INTO AKUN (email, password, nama, gender, tempat_lahir, tanggal_lahir, is_verified, kota_asal)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        """, [email, password, nama, gender, tempat_lahir, tanggal_lahir, is_verified, kota_asal])
+        
+        cursor.execute("""
+            INSERT INTO nonpremium (email)
+            VALUES (%s)
+        """, [email])
+
+        cursor.execute("set search_path to public;")
+
+def register_podcaster(email):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute("""
+            INSERT INTO podcaster (email)
+            VALUES (%s)
+        """, [email])
+
+        cursor.execute("set search_path to public;")
+            
+def register_artist(id, id_pemilik_hak_cipta, email):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute("""
+            INSERT INTO pemilik_hak_cipta (id, rate_royalti)
+            VALUES (%s, %s)
+        """, [id_pemilik_hak_cipta, 10])
+
+        cursor.execute("""
+            INSERT INTO artist (id, email_akun, id_pemilik_hak_cipta)
+            VALUES (%s, %s, %s)
+        """, [id, email, id_pemilik_hak_cipta])
+
+        cursor.execute("set search_path to public;")
+            
+def register_songwriter(id, id_pemilik_hak_cipta, email):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute("""
+            INSERT INTO pemilik_hak_cipta (id, rate_royalti)
+            VALUES (%s, %s)
+        """, [id_pemilik_hak_cipta, 10])
+
+        cursor.execute("""
+            INSERT INTO songwriter (id, email_akun, id_pemilik_hak_cipta)
+            VALUES (%s, %s, %s)
+        """, [id, email, id_pemilik_hak_cipta])
+
+        cursor.execute("set search_path to public;")
+
+def register_label(id, email, password, nama, kontak, id_pemilik_hak_cipta):
+    with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
+        cursor.execute("""
+            INSERT INTO pemilik_hak_cipta (id, rate_royalti)
+            VALUES (%s, %s)
+        """, [id_pemilik_hak_cipta, 10])
+
+        cursor.execute("""
+            INSERT INTO LABEL (id, email, password, nama, kontak, id_pemilik_hak_cipta)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, [id, email, password, nama, kontak, id_pemilik_hak_cipta])
+
+        cursor.execute("set search_path to public;")

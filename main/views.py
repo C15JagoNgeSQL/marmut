@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from main.query import *
+import uuid
 
 # Logout (normal)
 def logout_user(request): 
@@ -126,8 +127,59 @@ def show_dashboard(request):
 def show_register(request):
     return render(request, "register.html")
 
+@csrf_exempt
 def show_register_user(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        nama = request.POST.get('nama')
+        gender = request.POST.get('gender')
+        tempat_lahir = request.POST.get('tempat_lahir')
+        tanggal_lahir = request.POST.get('tanggal_lahir')
+        kota_asal = request.POST.get('kota_asal')
+
+        roles = request.POST.getlist('roles')
+        is_podcaster = 'podcaster' in roles
+        is_artist = 'artist' in roles
+        is_songwriter = 'songwriter' in roles
+
+        is_verified = is_podcaster or is_artist or is_songwriter
+
+        is_valid = email and password and nama and gender and tempat_lahir and tanggal_lahir and kota_asal
+        if not is_valid:
+            return render(request, "registerUser.html", {'error_message': 'Mohon masukkan data dengan benar!'})
+        if cek_existing_email(email):
+            return render(request, "registerUser.html", {'error_message': 'Email sudah terdaftar!'})
+        else:
+            register_user(email, password, nama, gender, tempat_lahir, tanggal_lahir, is_verified, kota_asal)
+            if is_podcaster:
+                register_podcaster(email)
+            if is_artist:
+                register_artist(uuid.uuid4(), uuid.uuid4(), email)
+            if is_songwriter:
+                register_songwriter(uuid.uuid4(), uuid.uuid4(), email)
+            return HttpResponseRedirect(reverse("main:login"))
+
     return render(request, "registerUser.html")
 
+@csrf_exempt
 def show_register_label(request):
+    if request.method == "POST":
+        id = uuid.uuid4()
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        nama = request.POST.get('nama')
+        kontak = request.POST.get('kontak')
+
+        is_valid = email and password and nama and kontak
+        if not is_valid:
+            return render(request, "registerLabel.html", {'error_message': 'Mohon masukkan data dengan benar!'})
+        if cek_existing_email(email):
+            return render(request, "registerLabel.html", {'error_message': 'Email sudah terdaftar!'})
+        else:
+            register_label(id, email, password, nama, kontak, uuid.uuid4())
+            return HttpResponseRedirect(reverse("main:login"))
+
     return render(request, "registerLabel.html")
+    
+
