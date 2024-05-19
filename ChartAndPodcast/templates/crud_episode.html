@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block framework %}
+  <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+  function deleteEpisode(id_podcast, id_episode) {
+    const url = "{% url 'ChartAndPodcast:delete_episode' %}";
+    fetch(url, {
+      method: 'DELETE',
+      body: JSON.stringify({
+        id_podcast: id_podcast,
+        id_episode: id_episode
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert('Episode berhasil dihapus');
+          window.location.reload();
+        } else {
+          alert('Gagal menghapus episode');
+        }
+      });
+  }
+  document.getElementById('episodeForm').addEventListener('submit', createEpisode);
+  function createEpisode(event) {
+      
+      event.preventDefault();
+      
+      const form = event.target;
+      const judul = form.judul.value;
+      const id_konten_podcast = id_podcast;
+      const deskripsi = form.deskripsi.value;
+      const durasi = form.durasi.value;
+      const tanggal_rilis = new Date().toISOString().split('T')[0];
+
+      console.log("isa");
+      fetch("{% url 'ChartAndPodcast:create_episode' %}", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+          judul: judul,
+          deskripsi: deskripsi,
+          durasi: durasi,
+          tanggal_rilis: tanggal_rilis,
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          alert('Episode berhasil dibuat');
+          window.location.reload();
+        } else {
+          alert('Gagal membuat episode');
+        }
+      });
+    }
+</script>
+
+{% endblock %}
+
+{% block content %}
+<div class="flex flex-col md:flex-row md:space-x-4 mt-20">
+    <!-- Create Episode Form -->
+    <div class="w-full md:w-1/3 p-4 pt-6 pb-8 mb-4 bg-orange-400 rounded shadow-md">
+      <h2 class="text-2xl font-bold mb-4 text-white">Create Episode</h2>
+
+        <form id="episodeForm">
+            <label class="block mb-2">
+            <span class="text-white">Podcast</span>
+            <select name="podcast" class="w-full px-4 py-2 border border-gray-300 rounded text-black">
+                {% for podcast in podcasts %}
+                <option value="{{ podcast.id_konten }}" class="text-black">{{ podcast.judul }}</option>
+                {% endfor %}
+            </select>
+            </label>
+            <label class="block mb-2">
+            <span class="text-white">Judul</span>
+            <input name="judul" type="text" class="w-full px-4 py-2 text-black border border-gray-300 rounded" required />
+            </label>
+            <label class="block mb-2">
+            <span class="text-white">Deskripsi</span>
+            <textarea name="deskripsi" class="w-full px-4 py-2 text-black border border-gray-300 rounded" required></textarea>
+            </label>
+            <label class="block mb-2">
+            <span class="text-white">Durasi</span>
+            <input name="durasi" type="text" class="w-full px-4 py-2 text-black border border-gray-300 rounded" required />
+            </label>
+            <button type="submit" class="bg-amber-500 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+        </form>
+    </div>
+  
+    <!-- List Episodes -->
+    <div class="w-full md:w-2/3 p-4 pt-6 pb-8 mb-4 bg-orange-400 rounded shadow-md">
+      <h2 class="text-2xl font-bold mb-4 text-black">Daftar Episode Podcast1</h2>
+      <section class="bg-white p-4 rounded shadow">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr>
+              <th class="px-4 py-2 text-black">Judul Episode</th>
+              <th class="px-4 py-2 text-black">Deskripsi</th>
+              <th class="px-4 py-2 text-black">Durasi</th>
+              <th class="px-4 py-2 text-black">Tanggal</th>
+              <th class="px-4 py-2 text-black">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for episode in episodes %}
+            <tr class="border-b">
+              <td class="px-4 py-2 text-black">{{ episode.judul }}</td>
+              <td class="px-4 py-2 text-black">{{ episode.deskripsi }}</td>
+              <td class="px-4 py-2 text-black">{{ episode.durasi }}</td>
+              <td class="px-4 py-2 text-black">{{ episode.tanggal_rilis }}</td>
+              <td class="px-4 py-2 text-black">
+                <button onclick="deleteEpisode('{{ episode.id_konten_podcast }}', '{{ episode.id_episode }}')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hapus</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>  
+    </div>
+  </div>
+  
+{% endblock content %}
