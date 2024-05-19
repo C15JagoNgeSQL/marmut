@@ -198,7 +198,7 @@
             {% if podcasts %}
                 <div class="grid grid-cols-4 gap-9">
                 {% for podcast in podcasts %}
-                  <a href="" class="group relative rounded-lg overflow-hidden shadow-lg hover:bg-orange-500">
+                  <a class=" podcast-link group relative rounded-lg overflow-hidden shadow-lg hover:bg-orange-500" data-id="{{ podcast.1 }}">
                       <div class="transition transform translate-y-8 ease-in absolute inset-0 flex justify-end items-center group-hover:translate-y-5 invisible group-hover:visible pt-4 pr-5">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 bg-orange-500 text-white p-3 rounded-full">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
@@ -217,6 +217,11 @@
                 <div class="mx-auto w-1/3"><img class="" src="{% static 'images/no_data_podcast.png' %}" alt="No Data"></div>
                 </div>
             {% endif %}`;
+
+    document.querySelectorAll('.podcast-link').forEach(link => {
+        const podcastId = link.getAttribute('data-id');
+        link.setAttribute('href', `{% url 'ChartAndPodcast:r_podcast' 'PLACEHOLDER' %}`.replace('PLACEHOLDER', podcastId));
+    });
   }
   if (isLabel) {
     document.getElementById("album").innerHTML = `
