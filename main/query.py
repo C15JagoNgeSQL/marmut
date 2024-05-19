@@ -3,7 +3,7 @@ import uuid
 
 def get_songs_artist(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         select konten.judul from konten, song, artist
@@ -11,12 +11,12 @@ def get_songs_artist(email):
         """, (email,))
 
         result = cursor.fetchall()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result
     
 def get_songs_songwriter(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         select konten.judul 
@@ -25,12 +25,12 @@ def get_songs_songwriter(email):
         """, (email,))
 
         result = cursor.fetchall()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result
 
 def get_podcasts(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         select konten.judul
@@ -39,12 +39,12 @@ def get_podcasts(email):
         """, (email,))
 
         result = cursor.fetchall()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result
     
 def get_playlist(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         select judul
@@ -53,12 +53,12 @@ def get_playlist(email):
         """, (email,))
 
         result = cursor.fetchall()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result
     
 def get_album(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         select album.judul
@@ -67,12 +67,12 @@ def get_album(email):
         """, (email,))
 
         result = cursor.fetchall()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result
 
 def get_akun_data(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         SELECT *
@@ -81,12 +81,12 @@ def get_akun_data(email):
         """, (email,))
 
         result = cursor.fetchone()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result
     
 def get_label_data(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         SELECT *
@@ -95,13 +95,13 @@ def get_label_data(email):
         """, (email,))
 
         result = cursor.fetchone()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result
 
 def login_akun(email, password):
     with conn.cursor() as cursor:
         # Mengatur schema database
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         SELECT *
@@ -111,13 +111,13 @@ def login_akun(email, password):
 
         result = cursor.fetchone()
 
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result
     
 def login_label(email, password):
     with conn.cursor() as cursor:
         # Mengatur schema database
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         SELECT *
@@ -127,12 +127,12 @@ def login_label(email, password):
 
         result = cursor.fetchone()
 
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result
     
 def cek_akun(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         SELECT *
@@ -141,13 +141,13 @@ def cek_akun(email):
         """, (email,))
     
         result = cursor.fetchone()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result is not None
 
     
 def cek_artist(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         SELECT *
@@ -156,12 +156,12 @@ def cek_artist(email):
         """, (email,))
 
         result = cursor.fetchone()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result is not None
 
 def cek_songwriter(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         SELECT *
@@ -170,12 +170,12 @@ def cek_songwriter(email):
         """, (email,))
 
         result = cursor.fetchone()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result is not None
 
 def cek_podcaster(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         SELECT *
@@ -184,12 +184,12 @@ def cek_podcaster(email):
         """, (email,))
 
         result = cursor.fetchone()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result is not None
 
 def cek_label(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         SELECT *
@@ -198,12 +198,12 @@ def cek_label(email):
         """, (email,))
 
         result = cursor.fetchone()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result is not None
 
 def cek_premium(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         SELECT *
@@ -212,12 +212,12 @@ def cek_premium(email):
         """, (email,))
 
         result = cursor.fetchone()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result is not None
 
 def cek_nonpremium(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute(""" 
         SELECT *
@@ -226,12 +226,12 @@ def cek_nonpremium(email):
         """, (email,))
 
         result = cursor.fetchone()
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
         return result is not None
     
 def cek_existing_email(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute("SELECT email FROM AKUN WHERE email = %s", [email])
         existing_email_in_user = cursor.fetchone()
@@ -239,7 +239,7 @@ def cek_existing_email(email):
         cursor.execute("SELECT email FROM LABEL WHERE email = %s", [email])
         existing_email_in_label = cursor.fetchone()
 
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
 
         if existing_email_in_user or existing_email_in_label:
             return True
@@ -248,7 +248,7 @@ def cek_existing_email(email):
     
 def register_user(email, password, nama, gender, tempat_lahir, tanggal_lahir, is_verified, kota_asal):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute("""
             INSERT INTO AKUN (email, password, nama, gender, tempat_lahir, tanggal_lahir, is_verified, kota_asal)
@@ -260,22 +260,22 @@ def register_user(email, password, nama, gender, tempat_lahir, tanggal_lahir, is
             VALUES (%s)
         """, [email])
 
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
 
 def register_podcaster(email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute("""
             INSERT INTO podcaster (email)
             VALUES (%s)
         """, [email])
 
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
             
 def register_artist(id, id_pemilik_hak_cipta, email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute("""
             INSERT INTO pemilik_hak_cipta (id, rate_royalti)
@@ -287,11 +287,11 @@ def register_artist(id, id_pemilik_hak_cipta, email):
             VALUES (%s, %s, %s)
         """, [id, email, id_pemilik_hak_cipta])
 
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
             
 def register_songwriter(id, id_pemilik_hak_cipta, email):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute("""
             INSERT INTO pemilik_hak_cipta (id, rate_royalti)
@@ -303,11 +303,11 @@ def register_songwriter(id, id_pemilik_hak_cipta, email):
             VALUES (%s, %s, %s)
         """, [id, email, id_pemilik_hak_cipta])
 
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
 
 def register_label(id, email, password, nama, kontak, id_pemilik_hak_cipta):
     with conn.cursor() as cursor:
-        #cursor.execute("set search_path to marmut;")
+        cursor.execute("set search_path to marmut;")
 
         cursor.execute("""
             INSERT INTO pemilik_hak_cipta (id, rate_royalti)
@@ -319,4 +319,4 @@ def register_label(id, email, password, nama, kontak, id_pemilik_hak_cipta):
             VALUES (%s, %s, %s, %s, %s, %s)
         """, [id, email, password, nama, kontak, id_pemilik_hak_cipta])
 
-        #cursor.execute("set search_path to public;")
+        cursor.execute("set search_path to public;")
