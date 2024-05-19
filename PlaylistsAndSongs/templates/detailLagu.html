@@ -89,8 +89,10 @@
                     <img src="{% static 'images/defaultPlaylist.png' %}" alt="Gambar playlist" class="w-full h-auto">
                 </div>
                 <div class="p-4 pt-0 w-full">
-                    <input type="range" min="0" max="100" value="40" step="1" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mb-5"/>
-                    <a href=""><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Play</button></a>
+                    <form onsubmit=handleSubmit(event)>
+                        <input type="range" id="progressSlider" min="0" max="100" value="0" step="1" class="slider w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer mb-5"/>
+                        <button type="submit" class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Play</button>
+                    </form>
                     <a href="{% url 'PlaylistAndSongs:tambah_lagu_ke_playlist' detail.id_song %}"><button class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Add to Playlist</button></a>
                     {% if premium %}
                     <button onclick=openModal() class="mb-3 w-full bg-orange-500 text-center text-white p-3 rounded-lg">Download</button>
@@ -180,6 +182,25 @@
     }
   
     closeModal.addEventListener('click', closeModalFunc);
+
+    function handleSubmit(event) {
+        event.preventDefault();
+        var slider = document.getElementById("progressSlider");
+        var sliderValue = slider.value;
+
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "{% url 'PlaylistAndSongs:slider_play' detail.id_song %}";
+
+        var sliderInput = document.createElement("input");
+        sliderInput.type = "hidden";
+        sliderInput.name = "slider_value";
+        sliderInput.value = sliderValue;
+        form.appendChild(sliderInput);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
 </script>
 
 {% endblock content %}

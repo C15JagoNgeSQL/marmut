@@ -10,445 +10,223 @@ from PlaylistsAndSongs.query import *
 def show_kelola_playlist(request):
     email = request.session.get('email')
 
-    with conn.cursor() as cursor:
-        cursor.execute("SELECT * FROM user_playlist WHERE email_pembuat = %s", [email])
-        rows = cursor.fetchall()
-        
-        playlists = [
-            {
-            'id':row[1],
-            'judul': row[2],
-            'jumlah_lagu': row[4],
-            'total_durasi': row[7],
-            }
-            for row in rows
-        ]
+    playlists = kelola_playlist(email)
 
     return render(request, "kelolaPlaylist.html", {'playlists': playlists})
 
 @csrf_exempt
 def show_tambah_playlist(request):
     if request.method == "POST":
-        id = uuid.uuid4()
-        id_playlist = uuid.uuid4()
+        if 'email' not in request.session:
+            return HttpResponseRedirect(reverse("main:login"))
+        
+        email_pembuat = request.session.get('email')
+        id_user_playlist = uuid.uuid4()
         judul = request.POST.get('judul')
         deskripsi = request.POST.get('deskripsi')
         tanggal_dibuat = timezone.now().date()
+        id_playlist = uuid.uuid4()
 
-        if 'email' not in request.session:
-            return HttpResponseRedirect(reverse("main:login"))
-    
-        email = request.session.get('email')
-
-        tambah_playlist(email,id,judul,deskripsi,tanggal_dibuat,id_playlist)
+        tambah_playlist(email_pembuat, id_user_playlist, judul, deskripsi, tanggal_dibuat, id_playlist)
         return HttpResponseRedirect(reverse("PlaylistAndSongs:kelola_playlist"))
 
     return render(request, "tambahPlaylist.html")
 
 @csrf_exempt
 def show_ubah_playlist(request, playlist_id):
-    with conn.cursor() as cursor:
-        cursor.execute("SELECT * FROM user_playlist WHERE id_user_playlist = %s", [playlist_id])
-        rows = cursor.fetchone()
+    playlist = get_data_playlist_for_ubah_playlist(playlist_id)
 
-        playlist = {
-            'judul': rows[2],
-            'deskripsi': rows[3]
-        }
+    if request.method == 'POST':
+        judul = request.POST.get('judul')
+        deskripsi = request.POST.get('deskripsi')
 
-        if request.method == 'POST':
-            judul = request.POST.get('judul')
-            deskripsi = request.POST.get('deskripsi')
-            cursor.execute("""
-                    UPDATE user_playlist
-                    SET judul = %s, deskripsi = %s
-                    WHERE id_user_playlist = %s
-                """, [judul, deskripsi, playlist_id])
-            return HttpResponseRedirect(reverse("PlaylistAndSongs:kelola_playlist"))
+        edit_playlist(judul, deskripsi, playlist_id)
+        return HttpResponseRedirect(reverse("PlaylistAndSongs:kelola_playlist"))
 
     return render(request, "ubahPlaylist.html", {'playlist': playlist})
 
 def show_hapus_playlist(request, playlist_id):
-    with conn.cursor() as cursor:
-        cursor.execute("SELECT * FROM user_playlist WHERE id_user_playlist = %s", [playlist_id])
-        rows = cursor.fetchone()
+    id_playlist = get_user_playlist_from_user_playlist_id(playlist_id)[6]
 
-        id_playlist = rows[6]
-
-        cursor.execute("""
-                DELETE FROM user_playlist
-                WHERE id_user_playlist = %s
-            """, [playlist_id])
-        
-        cursor.execute("""
-                DELETE FROM playlist
-                WHERE id = %s
-            """, [id_playlist])
-        return HttpResponseRedirect(reverse("PlaylistAndSongs:kelola_playlist"))
+    delete_user_playlist(playlist_id, id_playlist)
+    return HttpResponseRedirect(reverse("PlaylistAndSongs:kelola_playlist"))
 
 def show_detail_playlist(request, playlist_id):
-    with conn.cursor() as cursor:
-        cursor.execute("""
-            SELECT * 
-            FROM 
-                user_playlist 
-            JOIN 
-                akun ON akun.email = user_playlist.email_pembuat 
-            WHERE 
-                id_user_playlist = %s;
-        """, [playlist_id])
-        rows = cursor.fetchone()
-        print(rows)
-        cursor.execute("""
-            SELECT 
-                konten.judul,
-                konten.durasi,
-                akun.nama,
-                song.id_konten
-            FROM 
-                user_playlist
-            JOIN 
-                playlist ON user_playlist.id_playlist = playlist.id
-            JOIN 
-                playlist_song ON playlist.id = playlist_song.id_playlist
-            JOIN 
-                konten ON playlist_song.id_song = konten.id
-            JOIN
-                song ON playlist_song.id_song = song.id_konten
-            JOIN
-                artist ON song.id_artist = artist.id
-            JOIN 
-                akun ON artist.email_akun = akun.email
-            WHERE 
-                user_playlist.id_user_playlist = %s;
-        """, [playlist_id])
-        songs = cursor.fetchall()
+    detail_playlist = get_user_playlist_from_user_playlist_id(playlist_id)
+    songs = get_song_data(playlist_id)
 
-        detail = {
-            'id_user_playlist': rows[1],
-            'judul': rows[2],
-            'pembuat': rows[10],
-            'jumlah_lagu': rows[4],
-            'total_durasi': rows[7],
-            'tanggal_dibuat': rows[5],
-            'deskripsi': rows[3],
-            'id_playlist': rows[6],
-            'songs': [
-                {
-                'judul': song[0],
-                'durasi': song[1],
-                'nama_artist': song[2],
-                'id_song': song[3]
-                }
-                for song in songs
-            ]
-        }
+    detail = {
+        'id_user_playlist': detail_playlist[1],
+        'judul': detail_playlist[2],
+        'pembuat': detail_playlist[10],
+        'jumlah_lagu': detail_playlist[4],
+        'total_durasi': detail_playlist[7],
+        'tanggal_dibuat': detail_playlist[5],
+        'deskripsi': detail_playlist[3],
+        'id_playlist': detail_playlist[6],
+        'songs': [
+            {
+            'judul': song[0],
+            'durasi': song[1],
+            'nama_artist': song[2],
+            'id_song': song[3]
+            }
+            for song in songs
+        ]
+    }
 
-        return render(request, "detailPlaylist.html", {'detail': detail})
+    return render(request, "detailPlaylist.html", {'detail': detail})
 
 @csrf_exempt
 def show_tambah_lagu(request, playlist_id):
-    with conn.cursor() as cursor:
-        cursor.execute("""
-                SELECT 
-                    konten.judul AS judul_lagu, 
-                    akun.nama AS nama_artist,
-                    song.id_konten AS id_song
-                FROM 
-                    song
-                INNER JOIN 
-                    konten ON song.id_konten = konten.id
-                INNER JOIN 
-                    artist ON song.id_artist = artist.id
-                INNER JOIN 
-                    akun ON artist.email_akun = akun.email;
-            """)
-        songs = cursor.fetchall()
+    all_songs = get_all_song()
+    songs = [{'judul_lagu': row[0], 'nama_artist': row[1], 'id_song': row[2]} for row in all_songs]
+    
+    if request.method == 'POST':
+        id_song = request.POST.get('song_id')
 
-        songs = [{'judul_lagu': row[0], 'nama_artist': row[1], 'id_song': row[2]} for row in songs]
-        
-        if request.method == 'POST':
-            id_song = request.POST.get('song_id')
-            cursor.execute("SELECT * FROM user_playlist WHERE id_playlist = %s", [playlist_id])
-            rows = cursor.fetchone()
+        rows = get_user_playlist_from_playlist_id(playlist_id)
 
-            if check_lagu_exist_in_playlist(id_song, playlist_id):
-                return render(request, "tambahLagu.html", {'error_message': 'Lagu sudah terdapat dalam playlist!', 'songs': songs})
-            else:
-                cursor.execute("""
-                        INSERT INTO playlist_song (id_playlist, id_song)
-                        VALUES (%s,%s)
-                    """, [playlist_id, id_song])
-                
-                cursor.execute("""
-                    SELECT COUNT(id_song)
-                    FROM playlist_song
-                    WHERE id_playlist = %s
-                """, [playlist_id])
-                jumlah_lagu = cursor.fetchone()
-
-                cursor.execute("""
-                    SELECT SUM(konten.durasi)
-                    FROM playlist_song
-                    JOIN song ON playlist_song.id_song = song.id_konten
-                    JOIN konten ON konten.id = song.id_konten
-                    WHERE playlist_song.id_playlist = %s
-                """, [playlist_id])
-                total_durasi = cursor.fetchone()
-                
-                cursor.execute("""
-                    UPDATE user_playlist
-                    SET jumlah_lagu = %s, total_durasi = %s
-                    WHERE id_user_playlist = %s
-                """, [jumlah_lagu[0], total_durasi[0], rows[1]])
-                return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_playlist", kwargs={'playlist_id': rows[1]}))
+        if check_lagu_exist_in_playlist(id_song, playlist_id):
+            return render(request, "tambahLagu.html", {'error_message': 'Lagu sudah terdapat dalam playlist!', 'songs': songs})
+        else:
+            tambah_lagu_ke_playlist(playlist_id, id_song, rows)
+            return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_playlist", kwargs={'playlist_id': rows[1]}))
             
     return render(request, "tambahLagu.html", {'songs': songs})    
 
 def show_hapus_lagu(request, playlist_id, id_song):
-    with conn.cursor() as cursor:
-        cursor.execute("SELECT * FROM user_playlist WHERE id_playlist = %s", [playlist_id])
-        rows = cursor.fetchone()
-        cursor.execute("""
-                DELETE FROM playlist_song
-                WHERE id_playlist = %s AND id_song = %s
-            """, [playlist_id, id_song])
-        
-        cursor.execute("""
-            SELECT COUNT(id_song)
-            FROM playlist_song
-            WHERE id_playlist = %s
-        """, [playlist_id])
-        jumlah_lagu = cursor.fetchone()
+    rows = delete_lagu_dari_playlist(playlist_id, id_song)
+    return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_playlist", kwargs={'playlist_id': rows[1]}))
 
-        cursor.execute("""
-            SELECT SUM(konten.durasi)
-            FROM playlist_song
-            JOIN song ON playlist_song.id_song = song.id_konten
-            JOIN konten ON konten.id = song.id_konten
-            WHERE playlist_song.id_playlist = %s
-        """, [playlist_id])
-        total_durasi = cursor.fetchone()
-        if total_durasi[0] is None:
-            total_durasi = [0]
-        
-        cursor.execute("""
-            UPDATE user_playlist
-            SET jumlah_lagu = %s, total_durasi = %s
-            WHERE id_user_playlist = %s
-        """, [jumlah_lagu[0], total_durasi[0], rows[1]])
-        
-        return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_playlist", kwargs={'playlist_id': rows[1]}))
-          
 def show_detail_lagu(request, song_id):
-    with conn.cursor() as cursor:
-        email = request.session.get('email')
-        cursor.execute("""
-            SELECT 
-                premium.email
-            FROM 
-                premium
-            WHERE
-                premium.email = %s;
-        """, [email])
-        is_premium = cursor.fetchone()
+    email = request.session.get('email')
 
-        
-        cursor.execute("""
-            SELECT 
-                konten.judul,
-                konten.tanggal_rilis,
-                konten.tahun,
-                konten.durasi,
-                song.total_play,
-                song.total_download,
-                akun.nama,
-                album.judul
-            FROM 
-                konten
-            JOIN 
-                song ON konten.id = song.id_konten
-            JOIN
-                album ON album.id = song.id_album
-            JOIN
-                artist ON artist.id = song.id_artist
-            JOIN
-                akun ON akun.email = artist.email_akun
-            WHERE 
-                konten.id = %s;
-        """, [song_id])
-        songs = cursor.fetchone()
+    is_premium = check_if_premium(email)
+    songs = get_song_detail(song_id)
+    genres = get_song_genres(song_id)
+    songwriters = get_song_songwriters(song_id)
 
-        cursor.execute("""
-            SELECT 
-                genre.genre
-            FROM 
-                genre
-            JOIN 
-                konten ON konten.id = genre.id_konten
-            WHERE 
-                konten.id = %s;
-        """, [song_id])
-        genres = cursor.fetchall()
+    detail = {
+        'id_song': song_id,
+        'judul': songs[0],
+        'genres': [
+            {
+            'genre': genre[0]
+            }
+            for genre in genres
+        ],
+        'artist': songs[6],
+        'songwriters': [
+            {
+            'nama': songwriter[0]
+            }
+            for songwriter in songwriters
+        ],
+        'durasi': songs[3],
+        'tanggal_rilis': songs[1],
+        'tahun': songs[2],
+        'total_play': songs[4],
+        'total_download': songs[5],
+        'album': songs[7]
+    }
 
-        cursor.execute("""
-            SELECT 
-                akun.nama
-            FROM 
-                akun
-            JOIN 
-                songwriter ON songwriter.email_akun = akun.email
-            JOIN
-                songwriter_write_song ON songwriter_write_song.id_songwriter = songwriter.id
-            JOIN
-                song ON song.id_konten = songwriter_write_song.id_song
-            WHERE 
-                song.id_konten = %s;
-        """, [song_id])
-        songwriters = cursor.fetchall()
-
-        #print(songs)
-        #print(genres)
-        #print(songwriters)
-
-        detail = {
-            'id_song': song_id,
-            'judul': songs[0],
-            'genres': [
-                {
-                'genre': genre[0]
-                }
-                for genre in genres
-            ],
-            'artist': songs[6],
-            'songwriters': [
-                {
-                'nama': songwriter[0]
-                }
-                for songwriter in songwriters
-            ],
-            'durasi': songs[3],
-            'tanggal_rilis': songs[1],
-            'tahun': songs[2],
-            'total_play': songs[4],
-            'total_download': songs[5],
-            'album': songs[7]
-        }
     if is_premium:
         return render(request, "detailLagu.html", {'detail': detail, 'premium': 'premium'})
     else:
         return render(request, "detailLagu.html", {'detail': detail})
+    
+@csrf_exempt
+def slider_play(request, id_song):
+    if request.method == "POST":
+        email = request.session.get('email')
+        slider_value = int(request.POST.get("slider_value", 0))
 
+        if slider_value > 70:
+            current_time = timezone.now()
+            akun_play_song(email, id_song, current_time)
+        
+        return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_lagu", kwargs={'song_id': id_song}))
+            
 @csrf_exempt
 def show_tambah_lagu_ke_playlist(request, id_song):
-    with conn.cursor() as cursor:
-        cursor.execute("""
-            SELECT 
-                konten.judul,
-                akun.nama
-            FROM 
-                konten
-            JOIN 
-                song ON konten.id = song.id_konten
-            JOIN
-                artist ON artist.id = song.id_artist
-            JOIN
-                akun ON akun.email = artist.email_akun
-            WHERE 
-                konten.id = %s;
-        """, [id_song])
-        songs = cursor.fetchone()
+    email = request.session.get('email')
 
-        email = request.session.get('email')
+    songs = get_song_detail(id_song)
+    playlists = get_user_user_playlist(email)
 
-        cursor.execute("""
-            SELECT 
-                id_user_playlist,judul
-            FROM 
-                user_playlist
-            WHERE 
-                email_pembuat = %s;
-        """, [email])
-        playlists = cursor.fetchall()
-
-        song = {
-            'judul': songs[0],
-            'artist': songs[1],
-            'playlists': [
-                {
-                'id_user_playlist': playlist[0],
-                'playlist': playlist[1]
-                }
-                for playlist in playlists
-            ]
-        }
-
-        if request.method == 'POST':
-            id_user_playlist = request.POST.get('playlist')
-
-            cursor.execute("""
-                SELECT 
-                    id_playlist
-                FROM 
-                    user_playlist
-                WHERE 
-                    id_user_playlist = %s;
-            """, [id_user_playlist])
-            id_playlist = cursor.fetchone()
-            
-            if check_lagu_exist_in_playlist(id_song, id_playlist):
-                return render(request, "tambah_lagu_ke_playlist.html", {'song': song, 'error_message': 'Lagu sudah terdapat dalam playlist!', 'songs': songs})
-            else:
-                cursor.execute("""
-                    INSERT INTO playlist_song (id_playlist, id_song)
-                    VALUES (%s,%s)
-                """, [id_playlist, id_song])
-                
-                cursor.execute("""
-                    SELECT COUNT(id_song)
-                    FROM playlist_song
-                    WHERE id_playlist = %s
-                """, [id_playlist])
-                jumlah_lagu = cursor.fetchone()
-
-                cursor.execute("""
-                    SELECT SUM(konten.durasi)
-                    FROM playlist_song
-                    JOIN song ON playlist_song.id_song = song.id_konten
-                    JOIN konten ON konten.id = song.id_konten
-                    WHERE playlist_song.id_playlist = %s
-                """, [id_playlist])
-                total_durasi = cursor.fetchone()
-                
-                cursor.execute("""
-                    UPDATE user_playlist
-                    SET jumlah_lagu = %s, total_durasi = %s
-                    WHERE id_user_playlist = %s
-                """, [jumlah_lagu[0], total_durasi[0], id_user_playlist])
-                return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_lagu", kwargs={'song_id': id_song}))
-                
-        return render(request, "tambah_lagu_ke_playlist.html", {'song': song})
-
-def show_play_user_playlist(request):
-    detail = {
-        'judul': "Morning Vibes",
-        'pembuat': "Rafi",
-        'jumlah_lagu': "5",
-        'total_durasi': "44 menit",
-        'tanggal_dibuat': "26/03/2024",
-        'deskripsi': "Start your day with these uplifting tunes!",
-        'songs': [
+    song = {
+        'judul': songs[0],
+        'artist': songs[6],
+        'playlists': [
             {
-                'judul': "See You Again",
-                'nama_artist': "Valerie Jordan",
-                'durasi': "5"
-            },
-            {
-                'judul': "Hotline Bling",
-                'nama_artist': "Michael Wade",
-                'durasi': "3"
+            'id_user_playlist': playlist[0],
+            'playlist': playlist[1]
             }
+            for playlist in playlists
         ]
     }
+
+    if request.method == 'POST':
+        id_user_playlist = request.POST.get('playlist')
+
+        user_playlist_data = get_user_playlist_from_user_playlist_id(id_user_playlist)
+        
+        if check_lagu_exist_in_playlist(id_song, user_playlist_data[6]):
+            return render(request, "tambah_lagu_ke_playlist.html", {'song': song, 'error_message': 'Lagu sudah terdapat dalam playlist!', 'songs': songs})
+        else:
+            tambah_lagu_ke_playlist(user_playlist_data[6], id_song, user_playlist_data)
+            return HttpResponseRedirect(reverse("PlaylistAndSongs:detail_lagu", kwargs={'song_id': id_song}))
+            
+    return render(request, "tambah_lagu_ke_playlist.html", {'song': song})
+
+def show_play_user_playlist(request,playlist_id):
+    detail_playlist = get_user_playlist_from_user_playlist_id(playlist_id)
+    songs = get_song_data(playlist_id)
+
+    detail = {
+        'id_user_playlist': detail_playlist[1],
+        'judul': detail_playlist[2],
+        'pembuat': detail_playlist[10],
+        'jumlah_lagu': detail_playlist[4],
+        'total_durasi': detail_playlist[7],
+        'tanggal_dibuat': detail_playlist[5],
+        'deskripsi': detail_playlist[3],
+        'id_playlist': detail_playlist[6],
+        'songs': [
+            {
+            'judul': song[0],
+            'durasi': song[1],
+            'nama_artist': song[2],
+            'id_song': song[3]
+            }
+            for song in songs
+        ]
+    }
+
     return render(request, "play_user_playlist.html", {'detail': detail})
+
+def shuffle_play_playlist(request, playlist_id):
+    email = request.session.get('email')
+
+    user_playlist_data = get_user_playlist_from_user_playlist_id(playlist_id)
+    songs = get_song_data(playlist_id)
+    current_time = timezone.now()
+
+    akun_play_playlist(email, playlist_id, user_playlist_data, current_time)
+
+    for song in songs:
+        akun_play_song(email, song[3], current_time)
+
+    return HttpResponseRedirect(reverse("PlaylistAndSongs:play_user_playlist", kwargs={'playlist_id': playlist_id}))
+
+def play_song(request, id_song, playlist_id):
+    email = request.session.get('email')
+    current_time = timezone.now()
+
+    akun_play_song(email, id_song, current_time)
+    
+    return HttpResponseRedirect(reverse("PlaylistAndSongs:play_user_playlist", kwargs={'playlist_id': playlist_id}))
+
+
 
