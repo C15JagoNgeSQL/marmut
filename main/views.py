@@ -103,6 +103,7 @@ def show_dashboard(request):
             'isPengguna': request.session.get('isPengguna'),
             'playlists': playlists,
             'is_verified': is_verified,
+            'is_premium': request.session.get('isPremium'),
 
             'isArtist': request.session.get('isArtist'),
             'isSongwriter': request.session.get('isSongwriter'),
