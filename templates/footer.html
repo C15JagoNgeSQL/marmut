@@ -17,12 +17,8 @@
       </a>
       <div class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0">
         {% if user %}
-          <a href="" class="mr-4 hover:underline md:mr-6">Home</a>
+          <a href="{% url 'main:dashboard' %}" class="mr-4 hover:underline md:mr-6">Home</a>
         {% endif %}
-          <a href="" class="mr-4 hover:underline md:mr-6">Link 1</a>
-          <a href="" class="mr-4 hover:underline md:mr-6">Link 2</a>
-          <a href="" class="mr-4 hover:underline md:mr-6">Link 3</a>
-          <a href="" class="hover:underline">Link 4</a>
       </div>
     </div>
     <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8"/>
