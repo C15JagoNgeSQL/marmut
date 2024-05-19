@@ -229,6 +229,8 @@ def create_album(request):
             insert_genre(lagu_id, genre)
         
         insert_royalti(hak_cipta_id, lagu_id)
+        return HttpResponseRedirect(reverse("MusicIndustry:kelola_album"))
+
     return render(request, "create_album.html", context)
 
 def create_lagu(request, album_id):
