@@ -5,6 +5,7 @@
 {% block framework %}
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}
 
 {% block meta %}
@@ -15,18 +16,19 @@
 <body>
     <div class="flex justify-center items-start min-h-screen bg-gray-100 p-10">
         <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl mt-20">
-            <form method="POST">
+            <form id="createAlbumForm" method="POST">
                 {% csrf_token %}
                 <!-- Create New Album Section -->
                 <div class="mb-6">
                     <h3 class="text-xl font-bold mb-2">Create New Album</h3>
                     <div class="mb-4">
-                        <label for="judul" class="block text-sm font-medium text-gray-700">Judul:</label>
-                        <input type="text" id="judul" name="judul" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Nama Album">
+                        <label for="judul_album" class="block text-sm font-medium text-gray-700">Judul:</label>
+                        <input type="text" id="judul_album" name="judul" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Nama Album">
                     </div>
                     <div class="mb-6">
                         <label for="label" class="block text-sm font-medium text-gray-700">Label:</label>
                         <select id="label" name="label" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 border-orange-500 focus:outline-none focus:border-orange-600 focus:ring-orange-500 sm:text-sm rounded-lg">
+                            <option value="">Pilih Label</option>
                             {% for label in labels %}
                             <option value="{{ label.id }}">{{ label.nama }}</option>
                             {% endfor %}
@@ -39,7 +41,7 @@
                     <h3 class="text-xl font-bold mb-2">Lagu Pertama</h3>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Judul:</label>
-                        <input type="text" name="judul_lagu" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Tulis nama judul">
+                        <input type="text" id="judul_lagu" name="judul_lagu" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Tulis nama judul">
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Artist:</label>
@@ -49,7 +51,7 @@
                         </select>
                         {% else %}
                         <select id="artist" name="artist" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <option>Pilih nama artist</option>
+                            <option value="">Pilih nama artist</option>
                             {% for artist in artists %}
                             <option value="{{ artist.id }}">{{ artist.nama }}</option>
                             {% endfor %}
@@ -109,7 +111,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Durasi:</label>
-                        <input type="text" name="durasi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Tulis durasi lagu">
+                        <input type="text" id="durasi" name="durasi" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Tulis durasi lagu">
                     </div>
                 </div>
 
@@ -122,6 +124,99 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('createAlbumForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting immediately
+            const judulAlbum = document.getElementById('judul_album').value.trim();
+            const label = document.getElementById('label').value;
+            const judulLagu = document.getElementById('judul_lagu').value.trim();
+            const artist = document.getElementById('artist').value;
+            const durasi = document.getElementById('durasi').value.trim();
+            const songwriters = document.querySelectorAll('input[name="songwriter"]:checked').length;
+            const genres = document.querySelectorAll('input[name="genre"]:checked').length;
+
+            if (!judulAlbum) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Judul album tidak boleh kosong',
+                });
+                return;
+            }
+
+            if (!label) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Label harus dipilih',
+                });
+                return;
+            }
+
+            if (!judulLagu) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Judul lagu pertama tidak boleh kosong',
+                });
+                return;
+            }
+
+            if (!artist) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Artist harus dipilih',
+                });
+                return;
+            }
+
+            if (songwriters < 1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Minimal satu songwriter harus dipilih',
+                });
+                return;
+            }
+
+            if (genres < 1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Minimal satu genre harus dipilih',
+                });
+                return;
+            }
+
+            if (!durasi || isNaN(durasi)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Durasi tidak boleh kosong dan harus berupa angka',
+                });
+                return;
+            }
+
+            // Show confirmation dialog
+            Swal.fire({
+                title: "Simpan album baru?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Save",
+                denyButtonText: `Don't save`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire("Saved!", "", "success").then(() => {
+                        document.getElementById('createAlbumForm').submit(); // Submit the form
+                    });
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
+            });
+        });
+    </script>
 </body>
 {% include 'footer.html' %}
 {% endblock content %}
