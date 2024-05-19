@@ -38,7 +38,6 @@ def login_user(request):
                 if (cek_nonpremium(email)):
                     request.session['isNonPremium'] = True
                 
-                print("sukses")
                 return HttpResponseRedirect(reverse("main:dashboard"))
             else:
                 messages.info(request, 'Email or password is incorrect')
