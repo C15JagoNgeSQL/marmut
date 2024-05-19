@@ -291,6 +291,28 @@ def get_song_detail(song_id):
 
         return song_detail
     
+def hitung_total_play(song_id):
+    with conn.cursor() as cursor:
+        cursor.execute("""
+                SELECT COUNT(id_song)
+                FROM akun_play_song
+                WHERE id_song = %s
+            """, [song_id])
+        jumlah_play = cursor.fetchone()
+
+        return jumlah_play
+    
+def hitung_total_download(song_id):
+    with conn.cursor() as cursor:
+        cursor.execute("""
+                SELECT COUNT(id_song)
+                FROM downloaded_song
+                WHERE id_song = %s
+            """, [song_id])
+        jumlah_download = cursor.fetchone()
+
+        return jumlah_download
+    
 def get_song_genres(song_id):
     with conn.cursor() as cursor:
         cursor.execute("set search_path to marmut;")

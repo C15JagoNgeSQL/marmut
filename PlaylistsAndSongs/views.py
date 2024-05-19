@@ -125,6 +125,8 @@ def show_detail_lagu(request, song_id):
     songs = get_song_detail(song_id)
     genres = get_song_genres(song_id)
     songwriters = get_song_songwriters(song_id)
+    total_play = hitung_total_play(song_id)
+    total_download = hitung_total_download(song_id)
 
     detail = {
         'id_song': song_id,
@@ -145,8 +147,8 @@ def show_detail_lagu(request, song_id):
         'durasi': songs[3],
         'tanggal_rilis': songs[1],
         'tahun': songs[2],
-        'total_play': songs[4],
-        'total_download': songs[5],
+        'total_play': total_play[0],
+        'total_download': total_download[0],
         'album': songs[7]
     }
 
