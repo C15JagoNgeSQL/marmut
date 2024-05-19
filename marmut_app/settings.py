@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0)e44j@)trod-dod^j+qe*x1pk!*6cd+@*8m^8#7q-_ge%4m(4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -73,6 +73,33 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'marmut_app.wsgi.application'
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'access-control-allow-origin',
+]
+
+CSRF_TRUSTED_ORIGINS = ['https://marmut-app-c15.up.railway.app/']
+
+# Batasi asal yang diizinkan
+CORS_ALLOWED_ORIGINS = [
+    'https://marmut-app-c15.up.railway.app',
+    # Tambahkan domain lain jika diperlukan
+]
+
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
 
 
 # Database
