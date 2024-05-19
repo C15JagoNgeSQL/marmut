@@ -1,7 +1,10 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+import uuid
+from datetime import datetime
 from MusicIndustry.query import *
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -117,12 +120,11 @@ def kelola_album(request):
 
     return render(request, "kelola_album.html", context)
 
-def create_album(request):
-    return render(request, "create_album.html")
-
 def daftar_lagu(request, album_id):
+    if 'email' not in request.session:
+        return HttpResponseRedirect(reverse("main:login"))
     songs = get_albums_songs(album_id)
-    nama = get_album_name(album_id)[0]
+    nama = get_album_name(album_id)
 
     isi_tabel = []
     total_durasi = 0
@@ -144,28 +146,190 @@ def daftar_lagu(request, album_id):
     }
     return render(request, "daftar_lagu.html", context)
 
-def create_lagu(request):
+@csrf_exempt
+def create_album(request):
+    labels = get_labels()
+    pilihan_label = []
+    for label in labels:
+        label_dict = {
+            'id': label[0],
+            'nama': label[1],  # Nama Label
+        }
+        pilihan_label.append(label_dict)
+
+    artists = get_artists()
+    pilihan_artist = []
+    for artist in artists:
+        artist_dict = {
+            'id': artist[0],
+            'nama': artist[1],  # Nama artist
+        }
+        pilihan_artist.append(artist_dict)
+    
+    songwriters = get_songwriters()
+    pilihan_songwriter = []
+    for songwriter in songwriters:
+        songwriter_dict = {
+            'id': songwriter[0],
+            'nama': songwriter[1],  # Nama songwriter
+        }
+        pilihan_songwriter.append(songwriter_dict)
+
+    genres = get_genres()
+    pilihan_genre = []
+    for genre in genres:
+        genre_dict = {
+            'nama': genre[0],
+        }
+        pilihan_genre.append(genre_dict)
+
+    email = request.session.get('email')
+    is_artist = request.session.get('isArtist')
+    is_songwriter = request.session.get('isSongwriter')
+    
     context = {
-        'isSongwriter' : False
+        'me': get_name_akun(email),
+        'labels': pilihan_label,
+        'artists': pilihan_artist,
+        'genres': pilihan_genre,
+        'songwriters': pilihan_songwriter,
+        'isArtist': request.session.get('isArtist'),
+        'isSongwriter' : request.session.get('isSongwriter')
     }
+
+    if request.method == 'POST':
+        album_id = uuid.uuid4()
+        judul_album = request.POST.get('judul')
+        label = request.POST.get('label')
+
+        lagu_id = uuid.uuid4()
+        judul = request.POST.get('judul_lagu')
+        if (is_artist):
+            artist = get_id_artist(email)
+        else:
+            artist = request.POST.get('artist')
+
+        songwriters = request.POST.getlist('songwriter')
+        genres = request.POST.getlist('genre')
+        durasi = request.POST.get('durasi')
+        tanggal_rilis = datetime.now()
+        tahun = tanggal_rilis.year
+
+        if (is_artist):
+            hak_cipta_id = get_pemilik_hak_cipta_artist(email)
+        if (is_songwriter):
+            hak_cipta_id = get_pemilik_hak_cipta_songwriter(email)
+            songwriters.append(get_id_songwriter(email))
+
+        insert_album(album_id, judul_album, label, durasi)
+        insert_konten(lagu_id, judul, tanggal_rilis, tahun, durasi)
+        insert_song(lagu_id, artist, album_id)
+
+        for songwriter in songwriters:
+            insert_songwriter_write_song(songwriter, lagu_id)
+        for genre in genres:
+            insert_genre(lagu_id, genre)
+        
+        insert_royalti(hak_cipta_id, lagu_id)
+        return HttpResponseRedirect(reverse("MusicIndustry:kelola_album"))
+
+    return render(request, "create_album.html", context)
+
+@csrf_exempt
+def create_lagu(request, album_id):
+
+    artists = get_artists()
+    pilihan_artist = []
+    for artist in artists:
+        artist_dict = {
+            'id': artist[0],
+            'nama': artist[1],  # Nama artist
+        }
+        pilihan_artist.append(artist_dict)
+    
+    songwriters = get_songwriters()
+    pilihan_songwriter = []
+    for songwriter in songwriters:
+        songwriter_dict = {
+            'id': songwriter[0],
+            'nama': songwriter[1],  # Nama songwriter
+        }
+        pilihan_songwriter.append(songwriter_dict)
+    
+    genres = get_genres()
+    pilihan_genre = []
+    for genre in genres:
+        genre_dict = {
+            'nama': genre[0],
+        }
+        pilihan_genre.append(genre_dict)
+
+    email = request.session.get('email')
+    is_artist = request.session.get('isArtist')
+    is_songwriter = request.session.get('isSongwriter')
+    
+    context = {
+        'album_name': get_album_name(album_id),
+        'me': get_name_akun(email),
+        'artists': pilihan_artist,
+        'genres': pilihan_genre,
+        'songwriters': pilihan_songwriter,
+        'isArtist': is_artist,
+        'isSongwriter' : is_songwriter
+        
+    }
+
+    if request.method == 'POST':
+        lagu_id = uuid.uuid4()
+        judul = request.POST.get('judul')
+        if (is_artist):
+            artist = get_id_artist(email)
+        else:
+            artist = request.POST.get('artist')
+
+        songwriters = request.POST.getlist('songwriter')
+        genres = request.POST.getlist('genre')
+        durasi = request.POST.get('durasi')
+        tanggal_rilis = datetime.now()
+        tahun = tanggal_rilis.year
+
+        if (is_artist):
+            hak_cipta_id = get_pemilik_hak_cipta_artist(email)
+        if (is_songwriter):
+            hak_cipta_id = get_pemilik_hak_cipta_songwriter(email)
+            songwriters.append(get_id_songwriter(email))
+
+        insert_konten(lagu_id, judul, tanggal_rilis, tahun, durasi)
+        insert_song(lagu_id, artist, album_id)
+
+        for songwriter in songwriters:
+            insert_songwriter_write_song(songwriter, lagu_id)
+        for genre in genres:
+            insert_genre(lagu_id, genre)
+        
+        insert_royalti(hak_cipta_id, lagu_id)
+        return HttpResponseRedirect(reverse("MusicIndustry:kelola_album"))
+
     return render(request, "create_lagu.html", context)
 
+@csrf_exempt
 def delete_lagu(request, lagu_id):
     if request.method == 'POST':
         print(f"akan didelete lagu", lagu_id)
 
         #PANGGIL QUERYNYA TAPI NANTI AJA    
-        # delete_song_query(lagu_id)
+        delete_song_query(lagu_id)
 
         previous_url = request.META.get('HTTP_REFERER', '/')
         return HttpResponseRedirect(previous_url)
 
+@csrf_exempt
 def delete_album(request, album_id):
     if request.method == 'POST':
         print(f"akan didelete album", album_id)
 
         #PANGGIL QUERYNYA TAPI NANTI AJA    
-        # delete_album_query(album_id)
+        delete_album_query(album_id)
 
         previous_url = request.META.get('HTTP_REFERER', '/')
         return HttpResponseRedirect(previous_url)
