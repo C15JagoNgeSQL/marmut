@@ -255,11 +255,6 @@ def register_user(email, password, nama, gender, tempat_lahir, tanggal_lahir, is
             INSERT INTO AKUN (email, password, nama, gender, tempat_lahir, tanggal_lahir, is_verified, kota_asal)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """, [email, password, nama, gender, tempat_lahir, tanggal_lahir, is_verified, kota_asal])
-        
-        cursor.execute("""
-            INSERT INTO nonpremium (email)
-            VALUES (%s)
-        """, [email])
 
         cursor.execute("set search_path to public;")
 
