@@ -1,48 +1,9 @@
-from datetime import datetime
 from django.contrib import messages
-from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseNotFound, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from django.urls import reverse
-# from django.contrib.auth.models import User
-from django.db import connection as conn
 from django.views.decorators.csrf import csrf_exempt
 from main.query import *
-
-# def tes_query(request):
-#     context = {
-#         'name': 'C15',
-#         'class': 'BASDAT C'
-#     }
-    
-#     with conn.cursor() as cursor:
-#         # Mengatur schema database
-#         cursor.execute("set search_path to marmut;")
-        
-#         cursor.execute("SELECT * FROM PLAYLIST;")
-        
-#         results = cursor.fetchall()
-
-#         print("total ada %d" % (len(results)))
-#         # Mengeprint setiap baris dari hasil query
-#         for result in results:
-#             print(result)
-
-#     # Kembali ke halaman tertentu atau tampilkan suatu response
-#     return render(request, 'main.html', context)  # Sisipkan template yang sesuai
-
-# @login_required(login_url='/login')
-# #Main Page
-# def show_main(request):
-#     context = {
-#         'name': 'C15',
-#         'class': 'BASDAT C'
-#     }
-
-#     return render(request, "main.html", context)
-
 
 # Logout (normal)
 def logout_user(request): 
@@ -136,6 +97,7 @@ def show_dashboard(request):
             'isPengguna': request.session.get('isPengguna'),
             'playlists': playlists,
             'is_verified': is_verified,
+            'is_premium': request.session.get('isPremium'),
 
             'isArtist': request.session.get('isArtist'),
             'isSongwriter': request.session.get('isSongwriter'),
