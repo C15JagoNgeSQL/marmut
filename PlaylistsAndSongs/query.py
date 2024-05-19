@@ -1,9 +1,9 @@
 from django.db import connection as conn
 
-def kelola_playlist(email):
+def get_user_playlist_data(email):
     with conn.cursor() as cursor:
         cursor.execute("SELECT * FROM user_playlist WHERE email_pembuat = %s", [email])
-        data_playlists = cursor.fetchall()
+        user_playlist_data = cursor.fetchall()
         
         playlists = [
             {
@@ -12,7 +12,7 @@ def kelola_playlist(email):
             'jumlah_lagu': data[4],
             'total_durasi': data[7],
             }
-            for data in data_playlists
+            for data in user_playlist_data
         ]
 
         return playlists
@@ -28,26 +28,14 @@ def tambah_playlist(email, id_user_playlist, judul, deskripsi, tanggal_dibuat, i
             INSERT INTO USER_PLAYLIST (email_pembuat, id_user_playlist, judul, deskripsi, jumlah_lagu, tanggal_dibuat, id_playlist, total_durasi)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """, [email, id_user_playlist, judul, deskripsi, 0, tanggal_dibuat, id_playlist, 0])
-
-def get_data_playlist_for_ubah_playlist(playlist_id):
-    with conn.cursor() as cursor:
-        cursor.execute("SELECT * FROM user_playlist WHERE id_user_playlist = %s", [playlist_id])
-        rows = cursor.fetchone()
-
-        playlist = {
-            'judul': rows[2],
-            'deskripsi': rows[3]
-        }
-
-        return playlist
     
-def edit_playlist(judul, deskripsi, playlist_id):
+def edit_playlist(judul, deskripsi, user_playlist_id):
     with conn.cursor() as cursor:
         cursor.execute("""
             UPDATE user_playlist
             SET judul = %s, deskripsi = %s
             WHERE id_user_playlist = %s
-        """, [judul, deskripsi, playlist_id])
+        """, [judul, deskripsi, user_playlist_id])
 
 def get_user_playlist_from_user_playlist_id(id_user_playlist):
     with conn.cursor() as cursor:
@@ -302,3 +290,20 @@ def akun_play_playlist(email, playlist_id, user_playlist_data, current_time):
             INSERT INTO akun_play_user_playlist (email_pemain, id_user_playlist, email_pembuat, waktu)
             VALUES (%s, %s, %s, %s)
         """, [email, playlist_id, user_playlist_data[0], current_time])
+
+def check_downloaded_song(id_song):
+    with conn.cursor() as cursor:
+        cursor.execute("SELECT id_song FROM downloaded_song WHERE id_song = %s", [id_song])
+        existing_song = cursor.fetchone()
+
+        if existing_song:
+            return True
+        else:
+            return False
+
+def premium_download_song(id_song, email):
+    with conn.cursor() as cursor:
+        cursor.execute("""
+            INSERT INTO downloaded_song (id_song, email_downloader)
+            VALUES (%s, %s)
+        """, [id_song, email])

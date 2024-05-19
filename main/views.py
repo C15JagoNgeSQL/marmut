@@ -184,6 +184,9 @@ def show_register_user(request):
 
         is_verified = is_podcaster or is_artist or is_songwriter
 
+        is_valid = email and password and nama and gender and tempat_lahir and tanggal_lahir and kota_asal
+        if not is_valid:
+            return render(request, "registerUser.html", {'error_message': 'Mohon masukkan data dengan benar!'})
         if cek_existing_email(email):
             return render(request, "registerUser.html", {'error_message': 'Email sudah terdaftar!'})
         else:
@@ -207,10 +210,13 @@ def show_register_label(request):
         nama = request.POST.get('nama')
         kontak = request.POST.get('kontak')
 
+        is_valid = email and password and nama and kontak
+        if not is_valid:
+            return render(request, "registerLabel.html", {'error_message': 'Mohon masukkan data dengan benar!'})
         if cek_existing_email(email):
             return render(request, "registerLabel.html", {'error_message': 'Email sudah terdaftar!'})
         else:
-            register_label(id,email,password,nama,kontak)
+            register_label(id, email, password, nama, kontak, uuid.uuid4())
             return HttpResponseRedirect(reverse("main:login"))
 
     return render(request, "registerLabel.html")

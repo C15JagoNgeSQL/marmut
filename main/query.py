@@ -305,13 +305,18 @@ def register_songwriter(id, id_pemilik_hak_cipta, email):
 
         #cursor.execute("set search_path to public;")
 
-def register_label(id,email,password,nama,kontak):
+def register_label(id, email, password, nama, kontak, id_pemilik_hak_cipta):
     with conn.cursor() as cursor:
         #cursor.execute("set search_path to marmut;")
 
         cursor.execute("""
-            INSERT INTO LABEL (id, email, password, nama, kontak)
-            VALUES (%s, %s, %s, %s, %s)
-        """, [id,email,password,nama,kontak])
+            INSERT INTO pemilik_hak_cipta (id, rate_royalti)
+            VALUES (%s, %s)
+        """, [id_pemilik_hak_cipta, 10])
+
+        cursor.execute("""
+            INSERT INTO LABEL (id, email, password, nama, kontak, id_pemilik_hak_cipta)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, [id, email, password, nama, kontak, id_pemilik_hak_cipta])
 
         #cursor.execute("set search_path to public;")
