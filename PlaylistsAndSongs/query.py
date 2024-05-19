@@ -293,6 +293,8 @@ def get_song_detail(song_id):
     
 def hitung_total_play(song_id):
     with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
         cursor.execute("""
                 SELECT COUNT(id_song)
                 FROM akun_play_song
@@ -304,12 +306,16 @@ def hitung_total_play(song_id):
     
 def hitung_total_download(song_id):
     with conn.cursor() as cursor:
+        cursor.execute("set search_path to marmut;")
+
         cursor.execute("""
                 SELECT COUNT(id_song)
                 FROM downloaded_song
                 WHERE id_song = %s
             """, [song_id])
         jumlah_download = cursor.fetchone()
+
+        cursor.execute("set search_path to public;")
 
         return jumlah_download
     
