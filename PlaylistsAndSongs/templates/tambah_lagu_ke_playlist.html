@@ -16,51 +16,47 @@
     <div class="container px-20 py-24 mx-auto">
         <div class="flex flex-col lg:flex-row w-10/12 lg:w-8/12 bg-white rounded-xl border-2 border-gray-200 border-opacity-60 mx-auto overflow-hidden">
             <div class="w-full py-16 px-12">
-                <h2 class="text-4xl font-semibold mb-3">Tambah Lagu</h2>
-                <form action="#">
+                {% if gagal %}
+                <div class="bg-red-500 text-white p-3 rounded mb-4">
+                    Lagu dengan judul {{song.judul}} sudah ditambahkan di {{ gagal }}!
+                    <div class="flex pt-3">
+                      <a class="underline" href="{% url 'PlaylistsAndSongs:detail_playlist' id_user_playlist %}"><h2>Ke Playlist</h2></a>
+                      <a class="underline pl-3" href="{% url 'PlaylistsAndSongs:detail_lagu' song.id %}"><h2>Kembali</h2></a>
+                    </div>
+                </div>
+                {% endif %}
+                {% if berhasil %}
+                <div class="bg-green-500 text-white p-3 rounded mb-4">
+                    Berhasil menambahkan Lagu dengan judul {{song.judul}} ke {{ berhasil }}!
+                    <div class="flex pt-3">
+                      <a class="underline" href="{% url 'PlaylistsAndSongs:detail_playlist' id_user_playlist %}"><h2>Ke Playlist</h2></a>
+                      <a class="underline pl-3" href="{% url 'PlaylistsAndSongs:detail_lagu' song.id %}"><h2>Kembali</h2></a>
+                    </div>
+                </div>
+                {% endif %}
+                <h2 class="text-4xl font-semibold mb-3">Add Song to User Playlist</h2>
+                <form method="POST">
                     <h3 class="text-xl font-semibold mt-5">Judul: {{song.judul}}</h3>
                     <h3 class="text-xl font-semibold mt-5">Artist: {{song.artist}}</h3>
                     <h3 class="text-xl font-semibold mt-5">Playlist:</h3>
                     <div class="mt-5">
-                        <select id="playlistDropdown" class="border border-gray-400 py-1 px-2 w-full" required>
+                        <select id="playlistDropdown" name="playlist" class="border border-gray-400 py-1 px-2 w-full" required>
                             <option value = "" disabled selected>Select playlist</option>
                             {% for playlist in song.playlists %}
-                                <option value="{{ playlist }}">{{ playlist }}</option>
+                                <option value="{{ playlist.id_user_playlist }}">{{ playlist.playlist }}</option>
                             {% endfor %}
                         </select>    
                     </div>
                     <div class="mt-5">
-                        <button id="submitButton" onclick=openModal() class="w-full bg-orange-500 py-3 text-center text-white">Tambah</button>
-                    </div>
-                    <div class="mt-5">
-                        <button id="submitButton" class="w-full bg-gray-500 py-3 text-center text-white">Kembali</button>
+                        <button type="submit" id="submitButton" class="w-full bg-orange-500 py-3 text-center text-white">Tambah</button>
                     </div>
                 </form>
+                <div class="mt-5">
+                  <a href="{% url 'PlaylistsAndSongs:detail_lagu' song.id %}"><button id="submitButton" class="w-full bg-gray-500 py-3 text-center text-white">Kembali</button></a>
+                </div>
             </div>
         </div>
     </div>
-    <!-- Modal Background -->
-    <div id="modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" aria-labelledby="modalTitle" role="dialog" aria-modal="true">
-    <!-- Modal Content -->
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-      <div class="mt-3 text-center">
-        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modalTitle">
-          Berhasil!
-        </h3>
-        <div class="mt-2 px-7 py-3">
-          <p id="selectedPlaylist" class="text-sm text-gray-500"></p>
-        </div>
-        <div class="items-center px-4 py-3">
-            <button type="button" class="px-4 py-2 bg-orange-500 text-white text-base font-medium rounded-md w-auto shadow-sm hover:bg-gray-700">
-                Ke Playlist
-            </button>
-            <button id="closeModal" type="button" class="px-4 py-2 bg-gray-500 text-white text-base font-medium rounded-md w-auto shadow-sm hover:bg-gray-700">
-                Kembali
-            </button>
-        </div>
-      </div>
-    </div>
-  </div>
 </body>
 
 {% include 'footer.html' %}

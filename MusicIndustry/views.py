@@ -19,13 +19,20 @@ def show_royalti(request):
     if request.session.get('isLabel'):
         data = get_songs_royalti_label(email)
         nama = get_name_label(email)
+        id = get_pemilik_hak_cipta_label(email)
+
     else:
         if request.session.get('isArtist'):
             data += get_songs_royalti_artist(email)
+            id = get_pemilik_hak_cipta_artist(email)
+
         if request.session.get('isSongwriter'):
             data += get_songs_royalti_songwriter(email)
+            id = get_pemilik_hak_cipta_songwriter(email)
+            
         nama = get_name_akun(email)
 
+    rate = get_rate_royalti(id)
     isi_tabel = []
     total_play = 0
     total_download = 0
@@ -37,12 +44,12 @@ def show_royalti(request):
             'judul_album': song[2],
             'total_play': count_total_play(song[0]),
             'total_download': count_total_download(song[0]),
-            'total_royalti_didapat': song[3]
+            'total_royalti_didapat': count_total_play(song[0]) * rate
         }
         isi_tabel.append(song_dict)
         total_play += count_total_play(song[0])
         total_download += count_total_download(song[0])
-        total_royalti += song[3]
+        total_royalti += count_total_play(song[0]) * rate
         
     context = {
         'nama': nama,
